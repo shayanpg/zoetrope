@@ -11,24 +11,13 @@
 
     <link rel="stylesheet" href="{% static 'home/main.css' %}">
 
-    {% if title %}
-      <title>GSV {{ title }}</title>
-    {% else %}
-      <title>GSV</title>
-    {% endif %}
+    <title>GSV</title>
 
     <style>
       a:link, a:visited, a:hover, a:active {
-        /* background-color: #f44336; */
-        /* color: white; */
-        /* padding: 15px 25px; */
         text-align: center;
         text-decoration: none;
-        /* display: inline-block; */
       }
-      /* a:hover, a:active {
-        color: black;
-      } */
     </style>
   </head>
   <body>
@@ -54,14 +43,7 @@
       </nav>
     </header>
     <main role="main" class="container">
-      <div class="row container-fluid">
-        <div class="col" style="background-color:lavender;">
-          <a href="#"><h1>Address</h1></a>
-        </div>
-        <div class="col" style="background-color:lavenderblush;">
-          <a href="#"><h1>Polygon</h1></a>
-        </div>
-      </div>
+      {% block content %}{% endblock %}
     </main>
 
     <!-- Optional JavaScript; choose one of the two! -->
