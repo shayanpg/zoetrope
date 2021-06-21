@@ -11,7 +11,11 @@
 
     <link rel="stylesheet" href="{% static 'home/main.css' %}">
 
-    <title>GSV</title>
+    {% if title %}
+        <title>GSV - {{ title }}</title>
+    {% else %}
+        <title>GSV</title>
+    {% endif %}
 
     <style>
       a:link, a:visited, a:hover, a:active {
