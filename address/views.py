@@ -3,4 +3,4 @@ from django.shortcuts import render
 # Create your views here.
 
 def address(request):
-    return render(request, 'address/address.html', {'place':'holder'})
+    return render(request, 'address/address.html', {'title':'Address Finder'})
