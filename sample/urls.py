@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.sample, name='gsv-address'),
+    path('', views.sample, name='gsv-sample'),
 ]
