@@ -1,4 +1,6 @@
-# .gitignore ignores files not needed to operate. Below are files created by python and R that should not be stored on a repo. 
+# .gitignore ignores files not needed to operate. Below are files created by python and R that should not be stored on a repo.
+
+api_key.json
 
 #####
 # Python files to ignore

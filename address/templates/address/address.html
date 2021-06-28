@@ -4,11 +4,12 @@
   <h1 color='pink'>HELLO</h1>
 </div>
 <div class="row container-fluid">
-  <form class="" action="index.html" method="post">
+  <form class="" action="{% url 'gsv-response' %}" method="get">
+    <!-- {% csrf_token %} -->
     <label for="address">Address:</label><br>
     <input type="text" id="address" name="address"><br>
-    <label for="API-key">Streetview API Key:</label><br>
-    <input type="text" id="API-key" name="API-key"><br><br>
+    <label for="api_key">Streetview API Key:</label><br>
+    <input type="text" id="api_key" name="api_key"><br><br>
     <input type="submit" value="Submit">
   </form>
 </div>
