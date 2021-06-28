@@ -108,7 +108,8 @@ def download_images(latitude, longitude, key, address = False):
 def address_download(address, sv_key, m_key):
     print('Downloading pictures for address:', address)
     # extracts the latitude and longitude from the address using the maps api
-    lat, lon = address_to_coord(address, m_key)[0], address_to_coord(address, m_key)[1]
+    coords = address_to_coord(address, m_key)
+    lat, lon = coords[0], coords[1]
     # name the file
     fname = address.replace(' ', '_').replace(',', '')
     # download the street view images for the address using the extracted lat, long
