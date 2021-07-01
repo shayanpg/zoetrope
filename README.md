@@ -5,3 +5,5 @@
 A tool for visualizing neighborhood change
 
 ## TODO: Installation guide and product description
+
+(Uses Adrian Letchford's `streetview` library which allows users to download old images)

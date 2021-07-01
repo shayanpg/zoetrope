@@ -1,16 +1,14 @@
 from django.shortcuts import render
 
 import streetview
+# from sview import api_download_address
+# import sview as streetview
 import urllib
 from ast import literal_eval
 import json
-import numpy as np
 import csv
-# import pandas as pd
 import re
 import math
-# from datascience import *
-# import matplotlib.pyplot as plt
 import random
 
 from math import sin, cos, sqrt, atan2, radians
@@ -28,8 +26,8 @@ def address(request):
     return render(request, 'address/address.html', {'title':'Address Finder'})
 
 def response(request):
-
     # Gets all the specified values in the html form
+    import os
     download_information = Save_Request(request)
     address_download(download_information.address,
      download_information.sv_key,
@@ -38,7 +36,7 @@ def response(request):
      {'title':'Download Images',
       'sv_key': download_information.sv_key,
       'm_key': download_information.m_key,
-      'address': download_information.address})
+      'address': os.getcwd()})
 
 def calculate_initial_compass_bearing(pointA, pointB):
     """
@@ -92,16 +90,16 @@ def download_images(latitude, longitude, key, address = False):
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
     print('ANGLE:', angle)
     for elem in panoids:
-        print("ELEM \n", elem)
+        # print("ELEM \n", elem)
         try:
             if type(elem['year']) == int:
                 if address != False:
-                    # streetview.api_download_address(elem['panoid'], angle, '../downloads/', key, address, year = elem['year'])
-                    streetview.api_download(elem['panoid'], angle, '../downloads/', key)
+                    streetview.api_download_address(elem['panoid'], angle, './downloads/', key, address, year = elem['year'])
+                    # streetview.api_download(elem['panoid'], angle, './downloads', key)
                     print('Picture for', elem['month'], elem['year'], 'downloaded')
-                    print("TEST TEST TEST ADDRESS SHOULD BE FALSE (download_images in address.views)")
+                    # print("TEST TEST TEST ADDRESS SHOULD BE FALSE (download_images in address.views)")
                 else:
-                    streetview.api_download(elem['panoid'], angle, '../downloads/', key)
+                    streetview.api_download(elem['panoid'], angle, './downloads/', key)
         except KeyError:
             pass
 
