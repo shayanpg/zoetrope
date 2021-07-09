@@ -12,8 +12,14 @@ ul {
   margin: 0;
 }
 
-.bg-steel {
-  background-color: #5f788a;
+a:link, a:visited, a:hover, a:active {
+  text-align: center;
+  text-decoration: none;
+}
+
+.bg-nav {
+  /* background-color: #5f788a; */
+  background-color: #687890
 }
 
 .site-header .navbar-nav .nav-link {
