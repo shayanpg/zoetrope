@@ -11,8 +11,6 @@ import random
 
 from math import sin, cos, sqrt, atan2, radians
 
-# Create your views here.
-
 class Save_Request:
     def __init__(self, request):
         html_data = request.GET
