@@ -138,5 +138,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.Profile'
 
-# LOGIN_REDIRECT_URL = 'gsv-home'
-# LOGOUT_REDIRECT_URL = 'gsv-home'
+LOGIN_REDIRECT_URL = 'gsv-home'
+LOGOUT_REDIRECT_URL = 'gsv-home'
