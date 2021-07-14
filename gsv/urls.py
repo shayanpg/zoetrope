@@ -22,7 +22,7 @@ urlpatterns = [
     path('', include('home.urls')),
     path('address/', include('address.urls')),
     path('sample/', include('sample.urls')),
-    # path('register/', account_views.register, name='gsv-register'),
+    # path('register/', account_views.register, name='register'),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 
