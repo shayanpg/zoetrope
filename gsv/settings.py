@@ -32,9 +32,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'home.apps.HomeConfig',
-    'address.apps.AddressConfig',
-    'sample.apps.SampleConfig',
+    # 'users.apps.UsersConfig',
+    'home',
+    'address',
+    'sample',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,3 +135,8 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.Profile'
+
+LOGIN_REDIRECT_URL = 'gsv-home'
+LOGOUT_REDIRECT_URL = 'gsv-home'
