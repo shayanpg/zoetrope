@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row container-fluid">
-  <h1 color='pink'>RESPOINSE</h1>
+  <h1>RESPONSE</h1>
 </div>
 <div class="row container-fluid">
   <p>
     Streetview Key: {{ sv_key }} <br>
     Maps Key: {{ m_key }} <br>
-    address: {{ address }}
+    Address: {{ address }}
+  </p>
+</div>
+<div class="row container-fluid">
+  <p>
+    Downloaded for years {{ years }}
   </p>
 </div>
 {% endblock content %}

@@ -11,27 +11,24 @@ import random
 
 from math import sin, cos, sqrt, atan2, radians
 
-class Save_Request:
-    def __init__(self, request):
-        html_data = request.GET
-        self.sv_key = str(html_data['sv_key'])
-        self.m_key = str(html_data['m_key'])
-        self.address = str(html_data["address"])
-
 def address(request):
-    return render(request, 'address/address.html', {'title':'Address Finder'})
+    context = {
+        'title':'Address Finder',
+    }
+    return render(request, 'address/address.html', context)
 
 def response(request):
-    # Gets all the specified values in the html form
-    download_information = Save_Request(request)
-    address_download(download_information.address,
-     download_information.sv_key,
-     download_information.m_key)
-    return render(request, 'address/response.html',
-     {'title':'Download Images',
-      'sv_key': download_information.sv_key,
-      'm_key': download_information.m_key,
-      'address': download_information.address})
+    address = request.GET['address']
+    sv_key = request.user.gsv_api
+    m_key = request.user.maps_api
+    years = address_download(address, sv_key, m_key)
+    context = {'title':'Download Images',
+        'sv_key' : sv_key,
+        'm_key' : m_key,
+        'address' : address,
+        'years' : ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1]),
+    }
+    return render(request, 'address/response.html', context)
 
 def calculate_initial_compass_bearing(pointA, pointB):
     """
@@ -84,9 +81,11 @@ def download_images(latitude, longitude, key, address = False):
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
     print('ANGLE:', angle)
+    years = []
     for elem in panoids:
         try:
             if type(elem['year']) == int:
+                years.append(elem['year'])
                 if address != False:
                     streetview.api_download_address(elem['panoid'], angle, './downloads/', key, address, year = elem['year'])
                     print('Picture for', elem['month'], elem['year'], 'downloaded')
@@ -94,6 +93,9 @@ def download_images(latitude, longitude, key, address = False):
                     streetview.api_download(elem['panoid'], angle, './downloads/', key)
         except KeyError:
             pass
+    years = list(set(years))
+    years.sort()
+    return years
 
 def address_download(address, sv_key, m_key):
     print('Downloading pictures for address:', address)
@@ -103,4 +105,4 @@ def address_download(address, sv_key, m_key):
     # name the file
     fname = address.replace(' ', '_').replace(',', '')
     # download the street view images for the address using the extracted lat, long
-    download_images(lat, lon, sv_key, fname)
+    return download_images(lat, lon, sv_key, fname)

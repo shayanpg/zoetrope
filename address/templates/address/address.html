@@ -1,17 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="row container-fluid">
-  <h1 color='pink'>HELLO</h1>
+  <h1>ADDRESS DOWNLOADER</h1>
 </div>
 <div class="row container-fluid">
   <form class="" action="{% url 'gsv-response' %}" method="get">
     <!-- {% csrf_token %} -->
     <label for="address">Address:</label><br>
-    <input type="text" id="address" name="address"><br>
-    <label for="sv_key">Streetview API Key:</label><br>
-    <input type="text" id="sv_key" name="sv_key"><br><br>
-    <label for="m_key">Maps API Key:</label><br>
-    <input type="text" id="m_key" name="m_key"><br><br>
+    <input type="text" id="address" name="address"><br><br>
     <input type="submit" value="Submit">
   </form>
 </div>
