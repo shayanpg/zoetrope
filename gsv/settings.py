@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'address',
     'sample',
     'accounts',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,3 +141,5 @@ AUTH_USER_MODEL = 'accounts.Profile'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
