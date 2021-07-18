@@ -6,7 +6,7 @@ class ProfileCreationForm(UserCreationForm):
 
     class Meta:
         model = Profile
-        fields = ('username', 'email', 'gsv_api', 'maps_api')
+        fields = ('username', 'gsv_api', 'maps_api')
 
 class ProfileChangeForm(UserChangeForm):
 
