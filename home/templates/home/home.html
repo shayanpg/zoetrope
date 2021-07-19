@@ -3,61 +3,54 @@
 {% block content %}
 <!-- TODO: Convert into for loop (nested?) -->
 {% if user.is_authenticated %}
-  Welcome, {{ user.username }}
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
-  <div class="row mb-2">
-    <div class="col-md-6">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-          <br>
-          <h3 class="mb-0">Address</h3>
-          <br>
-          <p class="card-text mb-auto">Enter an address to get images over time</p>
-          <a href="{% url 'address' %}" class="stretched-link">Explore</a>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-          <img src="{% static 'home/streets.jpg' %}" alt="Address" width="200" height="250">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-          <br>
-          <h3 class="mb-0">Sample</h3>
-          <br>
-          <p class="mb-auto">Sample points in a geographic neighborhood</p>
-          <a href="{% url 'sample' %}" class="stretched-link">Explore</a>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-          <img src="{% static 'home/randomSampling.jpg' %}" alt="Sample" width="200" height="250">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row mb-2">
-    <div class="col-md-6">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-          <br>
-          <h3 class="mb-0">Manage Neighborhoods</h3>
-          <br>
-          <p class="card-text mb-auto">Create, edit, and delete neighborhoods</p>
-          <a href="#" class="stretched-link">Explore</a>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-          <img src="{% static 'home/neighborhood.jpg' %}" alt="Neighborhood" width="200" height="250">
-        </div>
-      </div>
-    </div>
-  </div>
-
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-  |
-  <a href="{% url 'register' %}">Sign Up</a>
+  <h3>Welcome, {{ user.username }}</h3>
 {% endif %}
+<div class="row mb-2">
+  <div class="col-md-6">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <br>
+        <h3 class="mb-0">Address</h3>
+        <br>
+        <p class="card-text mb-auto">Enter an address to get images over time</p>
+        <a href="{% url 'address' %}" class="stretched-link">Explore</a>
+      </div>
+      <div class="col-auto d-none d-lg-block">
+        <img src="{% static 'home/streets.jpg' %}" alt="Address" width="200" height="250">
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <br>
+        <h3 class="mb-0">Sample</h3>
+        <br>
+        <p class="mb-auto">Sample points in a geographic neighborhood</p>
+        <a href="{% url 'sample' %}" class="stretched-link">Explore</a>
+      </div>
+      <div class="col-auto d-none d-lg-block">
+        <img src="{% static 'home/randomSampling.jpg' %}" alt="Sample" width="200" height="250">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mb-2">
+  <div class="col-md-6">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <br>
+        <h3 class="mb-0">Manage Neighborhoods</h3>
+        <br>
+        <p class="card-text mb-auto">Create, edit, and delete neighborhoods</p>
+        <a href="#" class="stretched-link">Explore</a>
+      </div>
+      <div class="col-auto d-none d-lg-block">
+        <img src="{% static 'home/neighborhood.jpg' %}" alt="Neighborhood" width="200" height="250">
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
