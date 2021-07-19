@@ -1,14 +1,16 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<div class="row container-fluid">
-  <h1>ADDRESS DOWNLOADER</h1>
-</div>
-<div class="row container-fluid">
-  <form class="" action="{% url 'response' %}" method="get">
-    <!-- {% csrf_token %} -->
-    <label for="address">Address:</label><br>
-    <input type="text" id="address" name="address"><br><br>
-    <input type="submit" value="Submit">
+<div class="content-section">
+  <form action="{% url 'response' %}" method="post">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Address Downloader</legend>
+      {{ form|crispy }}
+    </fieldset>
+    <div class="form-group">
+      <button type="submit" name="address-button" class="btn btn-outline-info">Go</button>
+    </div>
   </form>
 </div>
 {% endblock content %}

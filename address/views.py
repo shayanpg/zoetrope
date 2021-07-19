@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import AddressForm
 
 import streetview
 import urllib
@@ -14,14 +16,25 @@ from math import sin, cos, sqrt, atan2, radians
 
 @login_required
 def address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.cleaned_data.get('address')
+            messages.success(request, f'Photos downloaded for {address}.')
+            return redirect('address')
+    else:
+        form = AddressForm()
+
     context = {
         'title':'Address Finder',
+        'form':form,
     }
     return render(request, 'address/address.html', context)
 
+
 @login_required
 def response(request):
-    address = request.GET['address']
+    address = request.POST['address']
     sv_key = request.user.gsv_api
     m_key = request.user.maps_api
     years = address_download(address, sv_key, m_key)
