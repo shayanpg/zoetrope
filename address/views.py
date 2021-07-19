@@ -20,6 +20,10 @@ def address(request):
         form = AddressForm(request.POST)
         if form.is_valid():
             address = form.cleaned_data.get('address')
+            sv_key = request.user.gsv_api
+            m_key = request.user.maps_api
+            years = address_download(address, sv_key, m_key)
+            messages.info(request, "Years: " + ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1]))
             messages.success(request, f'Photos downloaded for {address}.')
             return redirect('address')
     else:
@@ -30,21 +34,6 @@ def address(request):
         'form':form,
     }
     return render(request, 'address/address.html', context)
-
-
-@login_required
-def response(request):
-    address = request.POST['address']
-    sv_key = request.user.gsv_api
-    m_key = request.user.maps_api
-    years = address_download(address, sv_key, m_key)
-    context = {'title':'Download Images',
-        'sv_key' : sv_key,
-        'm_key' : m_key,
-        'address' : address,
-        'years' : ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1]),
-    }
-    return render(request, 'address/response.html', context)
 
 def calculate_initial_compass_bearing(pointA, pointB):
     """
