@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 import streetview
 import urllib
@@ -11,12 +12,14 @@ import random
 
 from math import sin, cos, sqrt, atan2, radians
 
+@login_required
 def address(request):
     context = {
         'title':'Address Finder',
     }
     return render(request, 'address/address.html', context)
 
+@login_required
 def response(request):
     address = request.GET['address']
     sv_key = request.user.gsv_api
