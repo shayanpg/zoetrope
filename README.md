@@ -13,9 +13,9 @@ A tool for visualizing neighborhood change
 4. `source venv/bin/activate` (Linux/MacOS) OR `source venv/Scripts/activate` (Windows)
 5. `pip install -r requirements.txt`
 6. To create a database:
-  1. `python manage.py makemigrations`
-  2. `python manage.py migrate`
-7. Now to run development server run `python manage.py runserver`
+  1. `python3 manage.py makemigrations`
+  2. `python3 manage.py migrate`
+7. Now to run development server run `python3 manage.py runserver`
 8. Go to link specified in terminal (localhost:8000)
 
 
