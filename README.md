@@ -7,16 +7,16 @@ A tool for visualizing neighborhood change
 ## Developer Installation
 *Prereqs: Python 3.6 or later, git*
 1. `git clone https://github.com/shayanpg/zoetrope.git`
-1. Navigate to project directory (`zoetrope`)
-2. `pip install virtualenv`
-3. `virtualenv venv`
-4. `source venv/bin/activate` (Linux/MacOS) OR `source venv/Scripts/activate` (Windows)
-5. `pip install -r requirements.txt`
-6. To create a database:
-  1. `python3 manage.py makemigrations`
-  2. `python3 manage.py migrate`
-7. Now to run development server run `python3 manage.py runserver`
-8. Go to link specified in terminal (localhost:8000)
+2. Navigate to project directory (`zoetrope`)
+3. `pip install virtualenv`
+4. `virtualenv venv`
+5. `source venv/bin/activate` (Linux/MacOS) OR `source venv/Scripts/activate` (Windows)
+6. `pip install -r requirements.txt`
+7. To create a database:
+    1. `python3 manage.py makemigrations`
+    2. `python3 manage.py migrate`
+8. Now to run development server run `python3 manage.py runserver`
+9. Go to link specified in terminal (localhost:8000)
 
 
 ## TODO: Production Installation guide and product description
