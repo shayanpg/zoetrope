@@ -48,10 +48,23 @@ def address_to_coord(address, m_key):
     add_url = base_url + address.replace(' ', '+') + '&key=' + m_key
     add_json = urllib.request.urlopen(add_url).read()
     data = literal_eval(add_json.decode('utf8'))
+    if not data.get('results') or data.get('status') == "ZERO_RESULTS":
+        return False
     return tuple(data.get('results')[0].get('geometry').get('location').values())
+
+def formatted_address(address, m_key):
+    base_url = 'https://maps.googleapis.com/maps/api/geocode/json?address='
+    add_url = base_url + address.replace(' ', '+') + '&key=' + m_key
+    add_json = urllib.request.urlopen(add_url).read()
+    data = literal_eval(add_json.decode('utf8'))
+    if not data.get('results') or data.get('status') == "ZERO_RESULTS":
+        return False
+    return data.get('results')[0].get('formatted_address')
 
 def download_images(latitude, longitude, key, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
+    if not panoids:
+        return False
     obj_coord = (panoids[0]['lat'], panoids[0]['lon'])
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
@@ -74,6 +87,8 @@ def address_download(address, sv_key, m_key):
     print('Downloading pictures for address:', address)
     # extracts the latitude and longitude from the address using the maps api
     coords = address_to_coord(address, m_key)
+    if not coords:
+        return False
     lat, lon = coords[0], coords[1]
     # name the file
     fname = address.replace(' ', '_').replace(',', '')
