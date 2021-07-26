@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'home',
     'address',
     'sample',
+    # 'neighborhood',
     'accounts',
     'crispy_forms',
     'django.contrib.admin',

@@ -84,7 +84,7 @@ def download_images(latitude, longitude, key, address = False):
     return years
 
 def address_download(address, sv_key, m_key):
-    print('Downloading pictures for address:', address)
+    # print('Downloading pictures for address:', address)
     # extracts the latitude and longitude from the address using the maps api
     coords = address_to_coord(address, m_key)
     if not coords:
