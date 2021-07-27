@@ -25,3 +25,5 @@ def neighborhood(request):
         'form':form,
     }
     return render(request, 'neighborhood/index.html', context)
+
+# TODO: Add Detail, Update, Delete Views
