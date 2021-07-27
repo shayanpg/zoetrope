@@ -13,9 +13,9 @@ def neighborhood(request):
             n.author = request.user
             form.save()
             messages.success(request, f'Neighborhood {n.name} created.')
-            return redirect('neighborhood')
         else:
             messages.error(request, "Form invalid. Please try again")
+        return redirect('neighborhood')
     else:
         form = NeighborhoodCreationForm()
 
