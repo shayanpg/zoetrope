@@ -1,6 +1,7 @@
-from django import forms
+from django.forms import ModelForm
+from .models import Neighborhood
 
-class NeighborhoodCreationForm(forms.ModelForm):
-    address = forms.CharField(label='Street Address',
-     help_text="e.g. 2384 Telegraph Ave, Berkeley, CA 94704",
-     max_length=100)
+class NeighborhoodCreationForm(ModelForm):
+    class Meta:
+        model = Neighborhood
+        fields = ['name', 'points']
