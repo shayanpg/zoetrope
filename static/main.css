@@ -46,6 +46,17 @@ a:link, a:visited, a:hover, a:active {
   margin-bottom: 20px;
 }
 
+.nhood-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e3e3e3
+}
+
+.nhood-metadata a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
 .nhood-title {
   color: #444444;
 }

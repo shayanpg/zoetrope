@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Profile
+from django.urls import reverse
 
 # Create your models here.
 class Neighborhood(models.Model):
@@ -14,5 +15,5 @@ class Neighborhood(models.Model):
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse('nhood-detail', kwargs={'pk': self.pk})
+    def get_absolute_url(self):
+        return reverse('nhood-detail', kwargs={'pk': self.pk})
