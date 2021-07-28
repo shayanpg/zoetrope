@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<header>
+  <h1 class="jumbotron-heading">Neighborhoods</h1>
+</header>
+<div class="content-section">
+  <div class="card-deck">
+  {% if neighborhood_list %}
+  {% for n in neighborhood_list %}
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ n.name }}</h5>
+          <small class="text-muted">Created by {{ n.author }}</small>
+        </div>
+        <div class="card-footer">
+          <a href="#" class="btn btn-outline-dark">Go To Map</a>
+          <a href="{% url 'nhood-detail' n.id %}" class="btn btn-outline-info">More Details</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  {% endif %}
+  </div>
+  <br>
+  <form method="post">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Define New Neighborhood</legend>
+      {{ form|crispy }}
+    </fieldset>
+    <div class="form-group">
+      <button class="btn btn-outline-info" type="submit">Create</button>
+    </div>
+  </form>
+</div>
+{% endblock content %}
