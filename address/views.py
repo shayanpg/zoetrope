@@ -16,9 +16,12 @@ def address(request):
             if not years:
                 messages.warning(request, f'No Photos Found for {address}.')
             else:
-                year_message = "Years: " + ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1])
+                if len(years) > 1:
+                    year_message = "Years: " + ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1])
+                else:
+                    year_message = f"Year: {years[0]}"
                 messages.info(request, year_message)
-                messages.success(request, f'Photos downloaded for {address}.')
+                messages.success(request, f'Photo(s) downloaded for {address}.')
             return redirect('address')
     else:
         form = AddressForm()
