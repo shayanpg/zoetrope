@@ -23,7 +23,8 @@ def neighborhood(request):
 
     context = {
         'title':'Neighborhoods',
-        'neighborhood_list': Neighborhood.objects.all(),
+        # 'neighborhood_list': Neighborhood.objects.all(),
+        'neighborhood_list': Neighborhood.objects.filter(author=request.user.id),
         'form':form,
     }
     return render(request, 'neighborhood/index.html', context)
