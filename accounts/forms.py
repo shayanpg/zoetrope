@@ -8,6 +8,7 @@ class ProfileCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['gsv_api'].required = True
         self.fields['maps_api'].required = True
+        self.fields['email'].required = True
 
         self.fields['gsv_api'].label = "Google Street View API Key"
         self.fields['maps_api'].label = "Google Maps API Key"
