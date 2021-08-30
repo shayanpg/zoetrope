@@ -146,17 +146,17 @@ def address_download(address, sv_key, m_key):
 #
 #     # template = loader.get_template('maps/polygon.html')
 #     # return HttpResponse(template.render({}, request))
-# def sample_from_area(polygon_dict):
-#     point_list = [(p['lat'], p['lng']) for p in polygon_dict]
-#     poly = Polygon(point_list)
-#     min_x, min_y, max_x, max_y = poly.bounds
-#     sample = []
-#     while len(sample) == 0:
-#         random_coord = [random.uniform(min_x, max_x), random.uniform(min_y, max_y)]
-#         random_point = Point(random_coord)
-#         if random_point.within(poly):
-#             sample.append(random_coord)
-#     return random_coord
+def sample_from_area(polygon_dict):
+    point_list = [(p['lat'], p['lng']) for p in polygon_dict]
+    poly = Polygon(point_list)
+    min_x, min_y, max_x, max_y = poly.bounds
+    sample = []
+    while len(sample) == 0:
+        random_coord = [random.uniform(min_x, max_x), random.uniform(min_y, max_y)]
+        random_point = Point(random_coord)
+        if random_point.within(poly):
+            sample.append(random_coord)
+    return random_coord
 #
 #
 # def str_to_dic(string):

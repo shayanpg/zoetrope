@@ -1,6 +1,16 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
-<header>
-  <h1 class="jumbotron-heading">Image Sampler</h1>
-</header>
+<div class="content-section">
+  <form method="post">
+    {% csrf_token %}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Neighborhood Sampler</legend>
+      {{ form|crispy }}
+    </fieldset>
+    <div class="form-group">
+      <button type="submit" name="sample-button" class="btn btn-outline-info">Go</button>
+    </div>
+  </form>
+</div>
 {% endblock content %}
