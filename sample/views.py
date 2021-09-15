@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .forms import SampleForm
+# from .forms import SampleForm
 
 @login_required
 def sample(request):
-    # return render(request, 'sample/sample.html', {'title':'Neighborhood Sampler'})
-    if request.method == 'POST':
-        form = SampleForm(request.POST, user=request.user)
-        if form.is_valid():
+    return render(request, 'sample/sample.html', {'title':'Neighborhood Sampler'})
+    # if request.method == 'POST':
+    #     form = SampleForm(request.POST, user=request.user)
+    #     if form.is_valid():
             # address = formatted_address(form.cleaned_data.get('address'), request.user.maps_api)
             # if not address:
             #     address = form.cleaned_data.get('address')
@@ -21,12 +21,12 @@ def sample(request):
             #         year_message = f"Year: {years[0]}"
             #     messages.info(request, year_message)
             #     messages.success(request, f'Photo(s) downloaded for {address}.')
-            return redirect('address')
-    else:
-        form = SampleForm(user=request.user)
-
-    context = {
-        'title':'Neighborhood Sampler',
-        'form':form,
-    }
-    return render(request, 'sample/sample.html', context)
+    #         return redirect('address')
+    # else:
+    #     form = SampleForm(user=request.user)
+    #
+    # context = {
+    #     'title':'Neighborhood Sampler',
+    #     'form':form,
+    # }
+    # return render(request, 'sample/sample.html', context)
