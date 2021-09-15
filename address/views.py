@@ -9,6 +9,7 @@ def address(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
+            #NOTE: If this breaks, check GCP Billing first
             address = formatted_address(form.cleaned_data.get('address'), request.user.maps_api)
             if not address:
                 address = form.cleaned_data.get('address')
