@@ -59,7 +59,6 @@ distributed @ file:///C:/ci/distributed_1605066635297/work
 distro==1.6.0
 Django==3.2.4
 django-crispy-forms==1.12.0
-django-google-maps==0.12.4
 docopt==0.6.2
 docutils==0.16
 entrypoints==0.3
