@@ -75,7 +75,7 @@ class Save_Request:
         self.sample_size = int(html_data["total_pic"])
 
 def map(request):
-    context = {'title':'map'}
+    context = {'title':'map', 'user': request.user}
     return render(request, 'map/map.html', context)
 
 def index(request):
