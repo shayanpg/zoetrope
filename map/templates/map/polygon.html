@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Zoetrope</title>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
+    </script>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/mapStyle.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <script src="{% static 'js/mapStuff.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+</head>
+<body>
+    <form action="{% url 'index' %}" method="get">
+    <!-- {% csrf_token %} -->
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Image Selection</h3>
+                </div>
+                <ul class="list-unstyled components">
+                    <li>
+                        <a href="#tempSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Temporal Constraints</a>
+                        <ul class="collapse" id="tempSubmenu">
+                            <input type="checkbox" id="dateSel" data-target="cDate">
+                            <span title="Only points on the specific date will be selected">Critical Date</span><br>
+                            <div id="cDate" name="dateDiv">
+                                <span style="display:inline-block">
+                                    <select name='c_month' id='c_month'>
+                                    <option selected="selected" disabled="disabled">Month</option>
+                                    <option value=1>Jan</option>
+                                    <option value=2>Feb</option>
+                                    <option value=3>Mar</option>
+                                    <option value=4>Apr</option>
+                                    <option value=5>May</option>
+                                    <option value=6>Jun</option>
+                                    <option value=7>Jul</option>
+                                    <option value=8>Aug</option>
+                                    <option value=9>Sep</option>
+                                    <option value=10>Oct</option>
+                                    <option value=11>Nov</option>
+                                    <option value=12>Dec</option>
+                                    </select>
+                                </span>
+                                <span style="display:inline-block">
+                                    <select name='c_day' id='c_day'>
+                                    <option selected="selected" disabled="disabled">Day</option>
+                                    <option value='1'>1</option>
+                                    <option value='2'>2</option>
+                                    <option value='3'>3</option>
+                                    <option value='4'>4</option>
+                                    <option value='5'>5</option>
+                                    <option value='6'>6</option>
+                                    <option value='7'>7</option>
+                                    <option value='8'>8</option>
+                                    <option value='9'>9</option>
+                                    <option value='10'>10</option>
+                                    <option value='11'>11</option>
+                                    <option value='12'>12</option>
+                                    <option value='13'>13</option>
+                                    <option value='14'>14</option>
+                                    <option value='15'>15</option>
+                                    <option value='16'>16</option>
+                                    <option value='17'>17</option>
+                                    <option value='18'>18</option>
+                                    <option value='19'>19</option>
+                                    <option value='20'>20</option>
+                                    <option value='21'>21</option>
+                                    <option value='22'>22</option>
+                                    <option value='23'>23</option>
+                                    <option value='24'>24</option>
+                                    <option value='25'>25</option>
+                                    <option value='26'>26</option>
+                                    <option value='27'>27</option>
+                                    <option value='28'>28</option>
+                                    <option value='29'>29</option>
+                                    <option value='30'>30</option>
+                                    <option value='31'>31</option>
+                                    </select>
+                                </span>
+
+                                <span style="display:inline-block">
+                                    <select name='c_year' id='c_year'>
+                                    <option selected="selected" disabled="disabled">Year</option>
+                                    <option value='2007'>2007</option>
+                                    <option value='2008'>2008</option>
+                                    <option value='2009'>2009</option>
+                                    <option value='2010'>2010</option>
+                                    <option value='2011'>2011</option>
+                                    <option value='2012'>2012</option>
+                                    <option value='2013'>2013</option>
+                                    <option value='2014'>2014</option>
+                                    <option value='2015'>2015</option>
+                                    <option value='2016'>2016</option>
+                                    <option value='2017'>2017</option>
+                                    <option value='2018'>2018</option>
+                                    <option value='2019'>2019</option>
+                                    </select>
+                                </span>
+                            </div>
+
+                            <br>
+
+                            <input type="checkbox" name="dateSel" data-target="wDate">
+                            <span title="Only points existing between these two dates will be selected">Window Bracket</span>
+                            <div id="wDate" class="dateDiv">
+                                <span style="display:inline-block">
+                                    <label>Start:</label>
+                                    <select name='month' id='month'>
+                                    <option selected="selected" disabled="disabled">Month</option>
+                                    <option value=1>Jan</option>
+                                    <option value=2>Feb</option>
+                                    <option value=3>Mar</option>
+                                    <option value=4>Apr</option>
+                                    <option value=5>May</option>
+                                    <option value=6>Jun</option>
+                                    <option value=7>Jul</option>
+                                    <option value=8>Aug</option>
+                                    <option value=9>Sep</option>
+                                    <option value=10>Oct</option>
+                                    <option value=11>Nov</option>
+                                    <option value=12>Dec</option>
+                                    </select>
+                                </span>
+                                <span style="display:inline-block">
+                                    <select name='day' id='day'>
+                                    <option selected="selected" disabled="disabled">Day</option>
+                                    <option value='1'>1</option>
+                                    <option value='2'>2</option>
+                                    <option value='3'>3</option>
+                                    <option value='4'>4</option>
+                                    <option value='5'>5</option>
+                                    <option value='6'>6</option>
+                                    <option value='7'>7</option>
+                                    <option value='8'>8</option>
+                                    <option value='9'>9</option>
+                                    <option value='10'>10</option>
+                                    <option value='11'>11</option>
+                                    <option value='12'>12</option>
+                                    <option value='13'>13</option>
+                                    <option value='14'>14</option>
+                                    <option value='15'>15</option>
+                                    <option value='16'>16</option>
+                                    <option value='17'>17</option>
+                                    <option value='18'>18</option>
+                                    <option value='19'>19</option>
+                                    <option value='20'>20</option>
+                                    <option value='21'>21</option>
+                                    <option value='22'>22</option>
+                                    <option value='23'>23</option>
+                                    <option value='24'>24</option>
+                                    <option value='25'>25</option>
+                                    <option value='26'>26</option>
+                                    <option value='27'>27</option>
+                                    <option value='28'>28</option>
+                                    <option value='29'>29</option>
+                                    <option value='30'>30</option>
+                                    <option value='31'>31</option>
+                                    </select>
+                                </span>
+
+                                <span style="display:inline-block">
+                                    <select name='year' id='year'>
+                                    <option selected="selected" disabled="disabled">Year</option>
+                                    <option value='2007'>2007</option>
+                                    <option value='2008'>2008</option>
+                                    <option value='2009'>2009</option>
+                                    <option value='2010'>2010</option>
+                                    <option value='2011'>2011</option>
+                                    <option value='2012'>2012</option>
+                                    <option value='2013'>2013</option>
+                                    <option value='2014'>2014</option>
+                                    <option value='2015'>2015</option>
+                                    <option value='2016'>2016</option>
+                                    <option value='2017'>2017</option>
+                                    <option value='2018'>2018</option>
+                                    <option value='2019'>2019</option>
+                                    </select>
+                                </span>
+                                <br>
+
+                                <span style="display:inline-block">
+                                    <label>End:&nbsp;&nbsp;</label>
+                                    <select name='month' id='month'>
+
+                                    <option selected="selected" disabled="disabled">Month</option>
+                                    <option value=1>Jan</option>
+                                    <option value=2>Feb</option>
+                                    <option value=3>Mar</option>
+                                    <option value=4>Apr</option>
+                                    <option value=5>May</option>
+                                    <option value=6>Jun</option>
+                                    <option value=7>Jul</option>
+                                    <option value=8>Aug</option>
+                                    <option value=9>Sep</option>
+                                    <option value=10>Oct</option>
+                                    <option value=11>Nov</option>
+                                    <option value=12>Dec</option>
+                                    </select>
+                                </span>
+                                <span style="display:inline-block">
+                                    <select name='day' id='day'>
+                                    <option selected="selected" disabled="disabled">Day</option>
+                                    <option value='1'>1</option>
+                                    <option value='2'>2</option>
+                                    <option value='3'>3</option>
+                                    <option value='4'>4</option>
+                                    <option value='5'>5</option>
+                                    <option value='6'>6</option>
+                                    <option value='7'>7</option>
+                                    <option value='8'>8</option>
+                                    <option value='9'>9</option>
+                                    <option value='10'>10</option>
+                                    <option value='11'>11</option>
+                                    <option value='12'>12</option>
+                                    <option value='13'>13</option>
+                                    <option value='14'>14</option>
+                                    <option value='15'>15</option>
+                                    <option value='16'>16</option>
+                                    <option value='17'>17</option>
+                                    <option value='18'>18</option>
+                                    <option value='19'>19</option>
+                                    <option value='20'>20</option>
+                                    <option value='21'>21</option>
+                                    <option value='22'>22</option>
+                                    <option value='23'>23</option>
+                                    <option value='24'>24</option>
+                                    <option value='25'>25</option>
+                                    <option value='26'>26</option>
+                                    <option value='27'>27</option>
+                                    <option value='28'>28</option>
+                                    <option value='29'>29</option>
+                                    <option value='30'>30</option>
+                                    <option value='31'>31</option>
+                                    </select>
+                                </span>
+
+                                <span style="display:inline-block">
+                                    <select name='year' id='year'>
+                                    <option selected="selected" disabled="disabled">Year</option>
+                                    <option value='2007'>2007</option>
+                                    <option value='2008'>2008</option>
+                                    <option value='2009'>2009</option>
+                                    <option value='2010'>2010</option>
+                                    <option value='2011'>2011</option>
+                                    <option value='2012'>2012</option>
+                                    <option value='2013'>2013</option>
+                                    <option value='2014'>2014</option>
+                                    <option value='2015'>2015</option>
+                                    <option value='2016'>2016</option>
+                                    <option value='2017'>2017</option>
+                                    <option value='2018'>2018</option>
+                                    <option value='2019'>2019</option>
+                                    </select>
+                                </span>
+                            </div>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#ptSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Point Level Specification</a>
+                        <ul class="collapse" id="ptSubmenu">
+                            <div class="form-group" style="white-space:nowrap">
+                                <span for="point_freq" title="A 360 view divided among the number of points">Pictures per Point</span>
+                                <div class="field">
+                                    <input class='form-control' id="point_freq" name="point_freq" type="number" pattern="\d+" min="0" value="1" style="width: 50px;"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="checkbox" name="aim_building" value="True">
+                                <span title="Select photos of buildings only">
+                                Building View
+                                </span>
+
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="list-unstyled CTAs">
+                    <li>
+                        <div align="center">
+                            <span for="total_pic" title="the number of sampled images">Number of Sample Points</span><br>
+                            <input id="total_pic" name = "total_pic" class="form-control col-md-4" type="number" step="5" pattern="\d+" min="0" value="5" /> <br>
+                            <input type="submit" class="btn btn-outline-light download" value="DOWNLOAD IMAGES"></input>
+                        </div>
+
+                    </li>
+                </ul>
+            </nav>
+
+        <!-- Page Content -->
+            <div id="content">
+                <nav class="navbar-inverse">
+                    <div class="container-fluid">
+                        <button type="button" id="sidebarCollapse" class="btn btn-default">
+                            <i class="fas fa-align-left"></i>
+                        </button>
+                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+
+                        <div class="neighborhood" align="right">
+                            <h1>{{ neighborhood.name }}</h1>
+                            <h1>{{ neighborhood.points }}</h1>
+                            <p id="neighborhood_def" hidden> {{ neighborhood.points }} </p>
+                            <p id="neighborhood_center" hidden> {{  neighborhood.center_point }} </p>
+                        </div>
+                    </div>
+                </nav>
+                <div id="map"></div>
+            </div>
+        </div>
+    </ul>
+
+
+<!-- DO NOT DELETE -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+
+</body>
+</html>

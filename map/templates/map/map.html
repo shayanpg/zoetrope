@@ -1,9 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
 <html>
-    <!-- <head>
-        {{form.media}}
-    </head>
-    {{form.as_p}} -->
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=" + "{{map_api}}" + "&callback=initMap">
-    </script>
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mapStyle.css' %}" />
+    <script src="{% static 'js/mapStuff.js' %}"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKnzlvIpGkMi5geH0SC7SEzjh3FEguPR8&callback=initMap&v=weekly"
+      async
+    ></script>
+  </body>
 </html>
