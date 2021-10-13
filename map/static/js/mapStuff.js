@@ -40,21 +40,33 @@
 
 // This example creates a simple polygon representing the Bermuda Triangle.
 function initMap() {
+  var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML)
+  // document.getElementById('test').innerHTML = document.getElementById('neighborhood_def').innerHTML
+
+  var centerLat = 0;
+  for (let i = 0; i < polyCoords.length; i++) centerLat += polyCoords[i]["lat"];
+  centerLat = centerLat / polyCoords.length;
+
+  var centerLng = 0;
+  for (let i = 0; i < polyCoords.length; i++) centerLng += polyCoords[i]["lng"];
+  centerLng = centerLng / polyCoords.length;
+
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 5,
-    center: { lat: 24.886, lng: -70.268 },
+    zoom: 15,
+    center: { lat: centerLat, lng: centerLng },
+    // center: { lat: centerLat, lng: centerLng },
     mapTypeId: "terrain",
   });
   // Define the LatLng coordinates for the polygon's path.
   const triangleCoords = [
-    { lat: 25.774, lng: -80.19 },
-    { lat: 18.466, lng: -66.118 },
-    { lat: 32.321, lng: -64.757 },
-    { lat: 25.774, lng: -80.19 },
+    { lat: 38.578150, lng: -121.485202 },
+    { lat: 38.575276, lng: -121.474581 },
+    { lat: 38.580765, lng: -121.4722 }
   ];
   // Construct the polygon.
   const bermudaTriangle = new google.maps.Polygon({
-    paths: triangleCoords,
+    // paths: triangleCoords,
+    paths: polyCoords,
     strokeColor: "#FF0000",
     strokeOpacity: 0.8,
     strokeWeight: 2,
