@@ -1,8 +1,29 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&libraries=drawing&callback=initMap">
+</script>
+
+<style type="text/css">
+  /* Set the size of the div element that contains the map */
+  #map {
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+  }
+</style>
+
+<script src="{% static 'js/drawMap.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+
+{% endblock head %}
+
 {% block content %}
 <div class="content-section">
-  <form method="post">
+  <form action="{% url 'home' %}" method="post">
     {% csrf_token %}
     <fieldset class="form-group">
       <legend class="border-bottom mb-4">Visual Neighborhood Creator</legend>
@@ -10,7 +31,7 @@
     <div id="map"></div>
     <p id="newpath"></p>
     <div class="form-group">
-      <button type="submit" name="address-button" class="btn btn-outline-info">Go</button>
+      <button type="submit" name="address-button" class="btn btn-outline-info">Create</button>
     </div>
   </form>
 </div>

@@ -2,17 +2,28 @@
 {% load static %}
 <html>
   <head>
-    <title>Simple Map</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/mapStyle.css' %}" />
-    <script src="{% static 'js/mapStuff.js' %}"></script>
+    <title>Add Map</title>
+
+    <style type="text/css">
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+      }
+    </style>
+
+    <script src="{% static 'js/drawMap.js' %}"></script>
   </head>
   <body>
+    <h3>My Google Maps Demo</h3>
+    <!--The div element for the map -->
     <div id="map"></div>
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap&libraries=drawing&v=weekly"
       async
     ></script>
   </body>

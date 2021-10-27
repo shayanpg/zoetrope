@@ -53,8 +53,8 @@ function initMap() {
 
   const map = new google.maps.Map(document.getElementById("map"), {
     zoom: 15,
+    // center: { lat: 38.578150, lng: -121.485202 },
     center: { lat: centerLat, lng: centerLng },
-    // center: { lat: centerLat, lng: centerLng },
     mapTypeId: "terrain",
   });
   // Define the LatLng coordinates for the polygon's path.
