@@ -90,7 +90,7 @@ def draw(request):
         name = request.POST.get('nhoodname').strip()
         path = request.POST.get('newpath')
         redir_dest = 'draw'
-        if not name:
+        if len(name) == 0:
             messages.warning(request, "Error: Please try again with a valid name.")
         else:
             path = "[" + path + "]"
