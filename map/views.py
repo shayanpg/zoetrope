@@ -46,7 +46,7 @@
 # 	}
 # 	return render(request, 'map/map.html', context)
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from django.views import generic
@@ -64,6 +64,10 @@ from neighborhood.models import Neighborhood
 from shapely.geometry import Polygon, Point
 import random
 import re
+
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 # Create your views here.
 
 class Save_Request:
@@ -74,14 +78,38 @@ class Save_Request:
         print('Sample size', int(html_data["total_pic"]))
         self.sample_size = int(html_data["total_pic"])
 
+@login_required
 def map(request):
     context = {'title':'map', 'user': request.user}
     return render(request, 'map/map.html', context)
 
+@login_required
 def draw(request):
+
+    if request.method == 'POST':
+        name = request.POST.get('nhoodname').strip()
+        path = request.POST.get('newpath')
+        redir_dest = 'draw'
+        if not name:
+            messages.warning(request, "Error: Please try again with a valid name.")
+        else:
+            path = "[" + path + "]"
+            path = path.replace("(", '{"lat":').replace(")", "}")
+            # next line is bc the original format uses spaces only inside a tuple, never between
+            path = path.replace(", ", ', "lng":')
+            n = Neighborhood(author=request.user, name=name, points=path)
+            n.save()
+            redir_dest = n
+            messages.success(request, name + ' created!')
+        print(name)
+        print(path)
+        # print(request.POST)
+        return redirect(redir_dest)
+
     context = {'title':'Draw', 'user':request.user}
     return render(request, 'map/draw.html', context)
 
+@login_required
 def index(request):
     neighborhood_list = Neighborhood.objects.all()
     context = {
@@ -91,7 +119,7 @@ def index(request):
 
     return render(request, 'map/index.html', context)
 
-
+@login_required
 def polygon(request, neighborhood_id):
 
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)

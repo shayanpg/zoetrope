@@ -32,6 +32,12 @@ function initMap() {
     },
   });
 
+  google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
+    var path = polygon.getPath().getArray();
+    // document.getElementById('newpath').value = 'hi!';
+    document.getElementById('newpath').value = path;
+  });
+
   drawingManager.setMap(map);
 }
 
