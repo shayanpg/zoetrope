@@ -78,6 +78,10 @@ def map(request):
     context = {'title':'map', 'user': request.user}
     return render(request, 'map/map.html', context)
 
+def draw(request):
+    context = {'title':'Draw', 'user':request.user}
+    return render(request, 'map/draw.html', context)
+
 def index(request):
     neighborhood_list = Neighborhood.objects.all()
     context = {

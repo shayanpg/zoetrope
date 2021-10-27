@@ -21,4 +21,6 @@ urlpatterns = [
     path('<int:neighborhood_id>', views.polygon, name='polygon'),
 
     path('m', views.map, name="map"),
+
+    path('draw', views.draw, name="draw"),
     ]
