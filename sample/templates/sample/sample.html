@@ -1,17 +1,44 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
+</script>
+
+<style type="text/css">
+  /* Set the size of the div element that contains the map */
+  #map {
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+  }
+</style>
+
+<script src="{% static 'js/sampleMap.js' %}"></script>
+
+{% endblock head %}
+
 {% block content %}
 <div class="content-section">
-  <!-- <form method="post">
+  <form action="#" method="post">
     {% csrf_token %}
     <fieldset class="form-group">
-      <legend class="border-bottom mb-4">Neighborhood Sampler</legend>
-      {{ form|crispy }}
+      <legend class="border-bottom mb-4">Neighborhood Sampler: {{ neighborhood.name }}</legend>
     </fieldset>
     <div class="form-group">
-      <button type="submit" name="sample-button" class="btn btn-outline-info">Go</button>
+      <p id="neighborhood_def" hidden> {{ neighborhood.points }} </p>
+      <p id="sampled_points"> {{ sample }} </p>
+      <div id="map"></div>
+      <span class="help-block">Disclaimer: Not all sampled points will have associated images.</span>
     </div>
-  </form> -->
-  Sample
+    <br>
+    <div class="form-group">
+      <label for="nhoodname">Number of Sample Points:</label>
+      <input required id="total_pic" name = "total_pic" class="form-control col-md-4" type="number" step="1" pattern="\d+" min="1" value="5" /> <br>
+      <button type="submit" name="sample-button" class="btn btn-outline-info">Download Images</button>
+    </div>
+  </form>
 </div>
 {% endblock content %}

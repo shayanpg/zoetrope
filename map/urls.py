@@ -1,16 +1,6 @@
 from django.urls import path
 from . import views
 
-# urlpatterns = [
-#     path('', views.MapFormView.as_view(), name='map'),
-#
-# ]
-
-# urlpatterns = [
-#     # path('route', views.route, name="route"),
-#     path('', views.map, name="map"),
-# ]
-
 urlpatterns = [
     #/map/
     path('', views.index, name='index'),

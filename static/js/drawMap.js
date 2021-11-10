@@ -12,11 +12,7 @@ function initMap() {
     drawingControlOptions: {
       position: google.maps.ControlPosition.TOP_CENTER,
       drawingModes: [
-        // google.maps.drawing.OverlayType.MARKER,
-        // google.maps.drawing.OverlayType.CIRCLE,
         google.maps.drawing.OverlayType.POLYGON,
-        // google.maps.drawing.OverlayType.POLYLINE,
-        // google.maps.drawing.OverlayType.RECTANGLE,
       ],
     },
     markerOptions: {
@@ -34,24 +30,8 @@ function initMap() {
 
   google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
     var path = polygon.getPath().getArray();
-    // document.getElementById('newpath').value = 'hi!';
     document.getElementById('newpath').value = path;
   });
 
   drawingManager.setMap(map);
 }
-
-// function initMap() {
-//   // The location of Uluru
-//   const uluru = { lat: -25.344, lng: 131.036 };
-//   // The map, centered at Uluru
-//   const map = new google.maps.Map(document.getElementById("map"), {
-//     zoom: 4,
-//     center: uluru,
-//   });
-//   // The marker, positioned at Uluru
-//   const marker = new google.maps.Marker({
-//     position: uluru,
-//     map: map,
-//   });
-// }

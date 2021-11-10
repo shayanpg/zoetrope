@@ -1,32 +1,41 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-# from .forms import SampleForm
+from django.contrib import messages
+import streetview
+
+from neighborhood.models import Neighborhood
+import random
+import re
+
+from utils import str_to_dic, sample_from_area, download_images
 
 @login_required
-def sample(request):
-    return render(request, 'sample/sample.html', {'title':'Neighborhood Sampler'})
-    # if request.method == 'POST':
-    #     form = SampleForm(request.POST, user=request.user)
-    #     if form.is_valid():
-            # address = formatted_address(form.cleaned_data.get('address'), request.user.maps_api)
-            # if not address:
-            #     address = form.cleaned_data.get('address')
-            # years = address_download(address, request.user.gsv_api, request.user.maps_api)
-            # if not years:
-            #     messages.warning(request, f'No Photos Found for {address}.')
-            # else:
-            #     if len(years) > 1:
-            #         year_message = "Years: " + ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1])
-            #     else:
-            #         year_message = f"Year: {years[0]}"
-            #     messages.info(request, year_message)
-            #     messages.success(request, f'Photo(s) downloaded for {address}.')
-    #         return redirect('address')
-    # else:
-    #     form = SampleForm(user=request.user)
-    #
-    # context = {
-    #     'title':'Neighborhood Sampler',
-    #     'form':form,
-    # }
-    # return render(request, 'sample/sample.html', context)
+def sample(request, neighborhood_id):
+
+    n = get_object_or_404(Neighborhood, pk=neighborhood_id)
+    context = {
+        'title':'Neighborhood Sampler',
+        'neighborhood': n,
+        'user': request.user,
+        'sample': []
+    }
+
+    if request.method == "POST":
+        num_points = int(request.POST.get('total_pic'))
+        pts = str_to_dic(n.points)
+        sample = sample_from_area(pts, num_points)
+        context['sample'] = sample
+        for p in sample:
+            years = download_images(p['lat'], p['lng'], request.user.gsv_api)
+            if not years:
+                messages.warning(request, f'No Photos Found for {str(p)}.')
+            else:
+                if len(years) > 1:
+                    year_message = str(p) + " Years: " + ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1])
+                else:
+                    year_message = str(p) + f" Year: {years[0]}"
+                messages.info(request, year_message)
+                messages.success(request, f'Photo(s) downloaded for {str(p)}.')
+        return render(request, 'sample/sample_success.html', context)
+
+    return render(request, 'sample/sample.html', context)
