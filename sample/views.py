@@ -36,6 +36,6 @@ def sample(request, neighborhood_id):
                     year_message = str(p) + f" Year: {years[0]}"
                 messages.info(request, year_message)
                 messages.success(request, f'Photo(s) downloaded for {str(p)}.')
-        return render(request, 'sample/sample_success.html', context)
+        # return render(request, 'sample/sample_success.html', context)
 
     return render(request, 'sample/sample.html', context)

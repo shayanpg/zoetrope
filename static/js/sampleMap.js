@@ -37,4 +37,5 @@ function initMap() {
   });
 
   poly.setMap(map);
+  // new google.maps.Marker({ position: { lat: centerLat, lng: centerLng }, map });
 }
