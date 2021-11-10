@@ -1,6 +1,15 @@
 function initMap() {
   var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML)
 
+  // let centerLatVals = [];
+  // let centerLngVals = [];
+  // for (let i = 0; i < polyCoords.length; i++) {
+  //   centerLatVals.push(polyCoords[i]["lat"]);
+  //   centerLngVals.push(polyCoords[i]["lng"]);
+  // }
+  // var centerLat = Math.min(centerLatVals) + Math.max(centerLatVals) / 2;
+  // var centerLng = Math.min(centerLngVals) + Math.max(centerLngVals) / 2;
+
   var centerLat = 0;
   var centerLng = 0;
   for (let i = 0; i < polyCoords.length; i++) {
