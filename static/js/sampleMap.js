@@ -1,5 +1,5 @@
 function initMap() {
-  var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML)
+  var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML);
 
   // let centerLatVals = [];
   // let centerLngVals = [];
@@ -20,20 +20,20 @@ function initMap() {
   centerLng = centerLng / polyCoords.length;
 
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 15,
+    zoom: 15, //try something like (rightlat-leftlat) + (toplat-bottomlat) all * some constant to make it reasonable scale
     center: { lat: centerLat, lng: centerLng },
     mapTypeId: "terrain",
   });
 
-  var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML)
-  var fillOp = 0.35
+  var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML);
+  var fillOp = 0.35;
+  document.getElementById('test').innerHTML = "HELLO";
   if (sampleCoords.length > 0) {
-    fillOp = 0.1
+    fillOp = 0.1;
     for (let i = 0; i < sampleCoords.length; i++) {
       new google.maps.Marker({ position: sampleCoords[i], map });
     }
   }
-
   // Construct the polygon.
   const poly = new google.maps.Polygon({
     // paths: triangleCoords,

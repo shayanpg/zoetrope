@@ -26,6 +26,8 @@ def sample(request, neighborhood_id):
         sample = sample_from_area(pts, num_points)
         context['sample'] = sample
         for p in sample:
+            # FIXME: Temporary removal of downloading
+            # years = [2022]
             years = download_images(p['lat'], p['lng'], request.user.gsv_api)
             if not years:
                 messages.warning(request, f'No Photos Found for {str(p)}.')
