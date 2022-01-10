@@ -1,26 +1,26 @@
 function initMap() {
   var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML);
 
-  // let centerLatVals = [];
-  // let centerLngVals = [];
-  // for (let i = 0; i < polyCoords.length; i++) {
-  //   centerLatVals.push(polyCoords[i]["lat"]);
-  //   centerLngVals.push(polyCoords[i]["lng"]);
-  // }
-  // var centerLat = Math.min(centerLatVals) + Math.max(centerLatVals) / 2;
-  // var centerLng = Math.min(centerLngVals) + Math.max(centerLngVals) / 2;
-
-  var centerLat = 0;
-  var centerLng = 0;
+  var centerLat = 0, centerLng = 0;
+  // var latMin = Number.MAX_VALUE, latMax = Number.MIN_VALUE;
+  // var lngMin = Number.MAX_VALUE, lngMax = Number.MIN_VALUE;
   for (let i = 0; i < polyCoords.length; i++) {
-    centerLat += polyCoords[i]["lat"];
-    centerLng += polyCoords[i]["lng"];
+    var currLat = polyCoords[i]["lat"], currLng = polyCoords[i]["lng"];
+    centerLat += currLat;
+    // latMin = Math.min(latMin, currLat);
+    // latMax = Math.max(latMax, currLat);
+
+    centerLng += currLng;
+    // lngMin = Math.min(lngMin, currLng);
+    // lngMax = Math.max(lngMax, currLng);
   }
   centerLat = centerLat / polyCoords.length;
   centerLng = centerLng / polyCoords.length;
 
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 15, //try something like (rightlat-leftlat) + (toplat-bottomlat) all * some constant to make it reasonable scale
+    zoom: 10, //try something like (rightlat-leftlat) + (toplat-bottomlat) all * some constant to make it reasonable scale
+    // zoom: 20 - (Math.round(latMax-latMin + lngMax-lngMin) % 19),// / (centerLat + centerLng);
+    // zoom: 800 / (Math.max(latMax-centerLat, centerLat-latMin)**2 + Math.max(lngMax-centerLng, centerLng-lngMin)**2)**0.5,
     center: { lat: centerLat, lng: centerLng },
     mapTypeId: "terrain",
   });
