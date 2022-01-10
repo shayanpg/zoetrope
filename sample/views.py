@@ -26,9 +26,8 @@ def sample(request, neighborhood_id):
         sample = sample_from_area(pts, num_points)
         context['sample'] = sample
         for p in sample:
-            # FIXME: Temporary removal of downloading
-            years = [2022]
-            # years = download_images(p['lat'], p['lng'], request.user.gsv_api)
+            # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
+            years = download_images(p['lat'], p['lng'], request.user.gsv_api)
             if not years:
                 messages.warning(request, f'No Photos Found for {str(p)}.')
             else:
@@ -38,8 +37,7 @@ def sample(request, neighborhood_id):
                     year_message = str(p) + f" Year: {years[0]}"
                 messages.info(request, year_message)
                 messages.success(request, f'Photo(s) downloaded for {str(p)}.')
-        # return render(request, 'sample/sample_success.html', context)
-        return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))#, context=context)
+        return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))
 
     return render(request, 'sample/sample.html', context)
 

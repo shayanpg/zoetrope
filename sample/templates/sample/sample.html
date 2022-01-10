@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-{% block head %}
 
+{% block head %}
 <style type="text/css">
   /* Set the size of the div element that contains the map */
   #map {
@@ -11,7 +11,6 @@
     /* The width is the width of the web page */
   }
 </style>
-
 {% endblock head %}
 
 {% block content %}
@@ -24,7 +23,7 @@
     <div class="form-group">
       <p id="neighborhood_def" hidden> {{ neighborhood.points }} </p>
       <p id="sampled_points" hidden> {{ sample }} </p>
-      <p id="test">no initMap call!</p>
+      <!-- <p id="test">no initMap call!</p> -->
       <div id="map"></div>
       <span class="help-block">Disclaimer: Not all sampled points will have associated images.</span>
     </div>

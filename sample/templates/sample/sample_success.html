@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-{% block head %}
 
+{% block head %}
 <style type="text/css">
   /* Set the size of the div element that contains the map */
   #map {
@@ -11,17 +11,14 @@
     /* The width is the width of the web page */
   }
 </style>
-
-
-
 {% endblock head %}
 
 {% block content %}
 <div class="content-section">
-  <h2>TEST SUCCESS Neighborhood Sampler: {{ neighborhood.name }}</h2>
-  <p id="neighborhood_def" > {{ neighborhood.points }} </p>
-  <p id="sampled_points" > {{ sample }} </p>
-  <p id="test">no initMap call! SUCC-FILE</p>
+  <h2>Sampled Points: {{ neighborhood.name }}</h2>
+  <p id="neighborhood_def" hidden> {{ neighborhood.points }} </p>
+  <p id="sampled_points" hidden> {{ sample }} </p>
+  <!-- <p id="test">no initMap call! SUCC-FILE</p> -->
   <div id="map"></div>
   <br>
   <a href="{% url 'sample_points' neighborhood.id %}" class="btn btn-outline-info">Sample Again!</a>

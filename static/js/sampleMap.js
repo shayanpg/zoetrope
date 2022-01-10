@@ -25,13 +25,10 @@ function initMap() {
     mapTypeId: "terrain",
   });
   var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML);
-  // var sampleCoords = document.getElementById('sampled_points').innerHTML.replace("/'/g", '"');
-  document.getElementById('test').innerHTML = "HELLO";
   var fillOp = 0.35;
 
   if (sampleCoords.length > 0) {
-    document.getElementById('test').innerHTML = sampleCoords;
-    fillOp = 0.1;
+    fillOp = 0.25;
     for (let i = 0; i < sampleCoords.length; i++) {
       new google.maps.Marker({ position: sampleCoords[i], map });
     }
@@ -49,9 +46,4 @@ function initMap() {
   });
 
   poly.setMap(map);
-  // new google.maps.Marker({ position: { lat: centerLat, lng: centerLng }, map });
 }
-// initMap()
-// function succMap() {
-//   initMap();
-// }
