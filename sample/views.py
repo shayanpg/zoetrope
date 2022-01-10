@@ -39,7 +39,7 @@ def sample(request, neighborhood_id):
                 messages.info(request, year_message)
                 messages.success(request, f'Photo(s) downloaded for {str(p)}.')
         # return render(request, 'sample/sample_success.html', context)
-        return redirect('sample_success', neighborhood_id, str(sample))#, context=context)
+        return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))#, context=context)
 
     return render(request, 'sample/sample.html', context)
 

@@ -1,6 +1,6 @@
 function initMap() {
   var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML);
-  document.getElementById('test').innerHTML = "HELLO";
+
   // let centerLatVals = [];
   // let centerLngVals = [];
   // for (let i = 0; i < polyCoords.length; i++) {
@@ -24,15 +24,19 @@ function initMap() {
     center: { lat: centerLat, lng: centerLng },
     mapTypeId: "terrain",
   });
-
   var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML);
+  // var sampleCoords = document.getElementById('sampled_points').innerHTML.replace("/'/g", '"');
+  document.getElementById('test').innerHTML = "HELLO";
   var fillOp = 0.35;
+
   if (sampleCoords.length > 0) {
+    document.getElementById('test').innerHTML = sampleCoords;
     fillOp = 0.1;
     for (let i = 0; i < sampleCoords.length; i++) {
       new google.maps.Marker({ position: sampleCoords[i], map });
     }
   }
+
   // Construct the polygon.
   const poly = new google.maps.Polygon({
     // paths: triangleCoords,

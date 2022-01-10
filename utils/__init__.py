@@ -125,7 +125,7 @@ def sample_from_area(polygon_dict, n):
         random_coord = [random.uniform(min_x, max_x), random.uniform(min_y, max_y)]
         random_point = Point(random_coord)
         if random_point.within(poly):
-            sample.append({'lat':random_coord[0], 'lng':random_coord[1]})
+            sample.append({"lat":random_coord[0], "lng":random_coord[1]})
     return sample
 #
 #

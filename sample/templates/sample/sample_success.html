@@ -24,7 +24,7 @@
   <p id="test">no initMap call! SUCC-FILE</p>
   <div id="map"></div>
   <br>
-  <a href="{% url 'sample' %}" class="btn btn-outline-info">Sample Again!</a>
+  <a href="{% url 'sample_points' neighborhood.id %}" class="btn btn-outline-info">Sample Again!</a>
 
   <script async
       src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
