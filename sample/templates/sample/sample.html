@@ -2,10 +2,6 @@
 {% load static %}
 {% block head %}
 
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
-</script>
-
 <style type="text/css">
   /* Set the size of the div element that contains the map */
   #map {
@@ -15,8 +11,6 @@
     /* The width is the width of the web page */
   }
 </style>
-
-<script src="{% static 'js/sampleMap.js' %}"></script>
 
 {% endblock head %}
 
@@ -41,5 +35,10 @@
       <button type="submit" name="sample-button" class="btn btn-outline-info">Download Images</button>
     </div>
   </form>
+
+  <script
+      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}">
+  </script>
+  <script src="{% static 'js/sampleMap.js' %}"></script>
 </div>
 {% endblock content %}

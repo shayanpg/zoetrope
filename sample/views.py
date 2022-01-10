@@ -27,8 +27,8 @@ def sample(request, neighborhood_id):
         context['sample'] = sample
         for p in sample:
             # FIXME: Temporary removal of downloading
-            # years = [2022]
-            years = download_images(p['lat'], p['lng'], request.user.gsv_api)
+            years = [2022]
+            # years = download_images(p['lat'], p['lng'], request.user.gsv_api)
             if not years:
                 messages.warning(request, f'No Photos Found for {str(p)}.')
             else:
@@ -39,5 +39,17 @@ def sample(request, neighborhood_id):
                 messages.info(request, year_message)
                 messages.success(request, f'Photo(s) downloaded for {str(p)}.')
         # return render(request, 'sample/sample_success.html', context)
+        return redirect('sample_success', neighborhood_id, str(sample))#, context=context)
 
     return render(request, 'sample/sample.html', context)
+
+@login_required
+def sample_success(request, neighborhood_id, sample):
+    n = get_object_or_404(Neighborhood, pk=neighborhood_id)
+    context = {
+        'title':'Neighborhood Sampler',
+        'neighborhood': n,
+        'user': request.user,
+        'sample': sample
+    }
+    return render(request, "sample/sample_success.html", context)
