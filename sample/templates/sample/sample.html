@@ -36,8 +36,8 @@
     </div>
   </form>
 
-  <script
-      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}">
+  <script async
+      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
   </script>
   <script src="{% static 'js/sampleMap.js' %}"></script>
 </div>

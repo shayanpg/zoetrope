@@ -1,6 +1,6 @@
 function initMap() {
   var polyCoords = JSON.parse(document.getElementById('neighborhood_def').innerHTML);
-
+  document.getElementById('test').innerHTML = "HELLO";
   // let centerLatVals = [];
   // let centerLngVals = [];
   // for (let i = 0; i < polyCoords.length; i++) {
@@ -27,7 +27,6 @@ function initMap() {
 
   var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML);
   var fillOp = 0.35;
-  document.getElementById('test').innerHTML = "HELLO";
   if (sampleCoords.length > 0) {
     fillOp = 0.1;
     for (let i = 0; i < sampleCoords.length; i++) {
@@ -48,7 +47,7 @@ function initMap() {
   poly.setMap(map);
   // new google.maps.Marker({ position: { lat: centerLat, lng: centerLng }, map });
 }
-initMap()
+// initMap()
 // function succMap() {
 //   initMap();
 // }

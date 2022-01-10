@@ -23,10 +23,11 @@
   <p id="sampled_points" > {{ sample }} </p>
   <p id="test">no initMap call! SUCC-FILE</p>
   <div id="map"></div>
-  <a href="{% url 'sample' %}" class="stretched-link">Sample Again!</a>
+  <br>
+  <a href="{% url 'sample' %}" class="btn btn-outline-info">Sample Again!</a>
 
-  <script
-      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}">
+  <script async
+      src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
   </script>
   <script src="{% static 'js/sampleMap.js' %}"></script>
 </div>

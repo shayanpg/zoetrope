@@ -47,7 +47,7 @@ def sample(request, neighborhood_id):
 def sample_success(request, neighborhood_id, sample):
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
     context = {
-        'title':'Neighborhood Sampler',
+        'title':'Neighborhood Sample Success Page',
         'neighborhood': n,
         'user': request.user,
         'sample': sample
