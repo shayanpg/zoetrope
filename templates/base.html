@@ -12,6 +12,8 @@
 
     <link rel="stylesheet" href="{% static 'main.css' %}">
 
+    {% block head %}{% endblock %}
+
     {% if title %}
         <title>Zoetrope - {{ title }}</title>
     {% else %}

@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+{% load static %}
+{% block head %}
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&libraries=drawing&callback=initMap">
+</script>
+
+<style type="text/css">
+  /* Set the size of the div element that contains the map */
+  #map {
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+  }
+</style>
+
+<script src="{% static 'js/drawMap.js' %}"></script>
+
+{% endblock head %}
+
+{% block heading %}
+<h1 class="jumbotron-heading">Neighborhoods</h1>
+<br>
+{% endblock heading %}
+
+{% block form %}
+<br>
+<form action="#" method="post">
+  {% csrf_token %}
+  <fieldset class="form-group">
+    <legend class="border-bottom mb-4">Neighborhood Creator</legend>
+  </fieldset>
+  <div class="form-group">
+    <label for="nhoodname">New Neighborhood Name:</label>
+    <input required id="nhoodname" class="form-control" name="nhoodname" placeholder="Enter Neighborhood Name">
+    <span class="help-block">Please be as descriptive as possible when naming your region. Example: Southside, Berkeley, CA</span>
+  </div>
+  <br>
+  <div class="form-group">
+    <h1 id="api_failure">Map failed to load, please reload the page.</h1>
+    <div id="map"></div>
+    <span class="help-block">Be sure to create only one shape. Form will only save most recently drawn polygon.</span>
+    <input required hidden id="newpath" class="form-control" name="newpath" value="">
+  </div>
+  <br>
+  <div class="form-group">
+    <button type="submit" name="nhood-create-button" class="btn btn-outline-info">Create</button>
+    <a href="{% url 'json_creator' %}" class="btn btn-outline-dark">Alternate - Create With JSON</a>
+  </div>
+</form>
+{% endblock form %}
