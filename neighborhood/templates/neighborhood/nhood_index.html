@@ -17,7 +17,6 @@
 </style>
 
 <script src="{% static 'js/drawMap.js' %}"></script>
-<script src="{% static 'js/script.js' %}"></script>
 
 {% endblock head %}
 
@@ -40,6 +39,7 @@
   </div>
   <br>
   <div class="form-group">
+    <h1 id="api_failure">Map failed to load, please reload the page.</h1>
     <div id="map"></div>
     <span class="help-block">Be sure to create only one shape. Form will only save most recently drawn polygon.</span>
     <input required hidden id="newpath" class="form-control" name="newpath" value="">

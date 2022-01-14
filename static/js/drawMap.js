@@ -3,8 +3,10 @@
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=drawing">
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
+    center: {lat: 37.873103, lng: -122.259420},
     zoom: 8,
+    mapTypeId: "terrain",
+    gestureHandling: "greedy",
   });
   const drawingManager = new google.maps.drawing.DrawingManager({
     drawingMode: google.maps.drawing.OverlayType.POLYGON,
@@ -34,4 +36,6 @@ function initMap() {
   });
 
   drawingManager.setMap(map);
+
+  document.getElementById("api_failure").innerHTML = "";
 }

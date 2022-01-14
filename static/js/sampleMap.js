@@ -23,6 +23,7 @@ function initMap() {
     // zoom: 800 / (Math.max(latMax-centerLat, centerLat-latMin)**2 + Math.max(lngMax-centerLng, centerLng-lngMin)**2)**0.5,
     center: { lat: centerLat, lng: centerLng },
     mapTypeId: "terrain",
+    gestureHandling: "greedy",
   });
   var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML);
   var fillOp = 0.35;
@@ -46,4 +47,6 @@ function initMap() {
   });
 
   poly.setMap(map);
+
+  document.getElementById("api_failure").innerHTML = "";
 }

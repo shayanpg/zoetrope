@@ -18,7 +18,7 @@
   <h2>Sampled Points: {{ neighborhood.name }}</h2>
   <p id="neighborhood_def" hidden> {{ neighborhood.points }} </p>
   <p id="sampled_points" hidden> {{ sample }} </p>
-  <!-- <p id="test">no initMap call! SUCC-FILE</p> -->
+  <h1 id="api_failure">Map failed to load, please reload the page.</h1>
   <div id="map"></div>
   <br>
   <a href="{% url 'sample_points' neighborhood.id %}" class="btn btn-outline-info">Sample Again!</a>
