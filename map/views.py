@@ -22,14 +22,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # Create your views here.
 
-class Save_Request:
-    def __init__(self, request):
-        html_data = request.POST
-        self.critical_date = {'year': int(html_data['c_year']), 'month': int(html_data['c_month']), 'day': int(html_data['c_day'])}
-        self.num_points = int(html_data["point_freq"])
-        print('Sample size', int(html_data["total_pic"]))
-        self.sample_size = int(html_data["total_pic"])
-
 @login_required
 def map(request):
     context = {'title':'map', 'user': request.user}
@@ -108,45 +100,6 @@ def str_to_dic(string):
         coords = re.findall(r"[-+]?\d*\.\d+|\d+", point)
         data += [{"lat": float(coords[0]), "lng": float(coords[1])}]
     return data
-
-
-# def download_some_images(request, neighborhood_id):
-#
-#     # Gets all the specified values in the html form
-#     download_information = Save_Request(request)
-#     # print('Num Points', download_information.num_points)
-#
-#     # Retrieves and reformats the neighborhood's coordinates
-#     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
-#     polygon_dict = str_to_dic(n.polygon_string)
-#
-#     # Sampling Checking Downloading loop
-#     num_dwl = 0
-#     while num_dwl < 3: #download_information.num_points:
-#         # sample a point within the relevant area
-#         s_point = sample_from_area(list(polygon_dict))
-#         lat = s_point[0]
-#         lng = s_point[1]
-#         # get the api keys
-#         sv_key = request.user.gsv_api
-#         m_key = request.user.maps_api
-#         # approximate the lat lng based on available address
-#         nearest_address = snap_point_to_address(lat, lng, m_key)
-#         lat = nearest_address['geometry']['location']['lat']
-#         lng = nearest_address['geometry']['location']['lng']
-#         formatted_address = nearest_address['formatted_address']
-#         # Get the panoids for that particular point
-#         panoids = streetview.panoids(lat=lat, lon=lng)
-#         # filter the panoids
-#         # filt_p = specific_year_filt(panoids, download_information.critical_date['year'])
-#         # filt_p = filter_panoids('Filter', panoids)
-#         if len(panoids) != 0:
-#             num_dwl += 1
-#             # panoid_dwl(download_information, lat, lng, filt_p, sv_key, formatted_address)
-#             download_images(download_information, lat, lng, sv_key, formatted_address)
-#
-#     template = loader.get_template('map/index.html')
-#     return HttpResponse(template.render({}, request))
 
 def snap_point_to_address(lat, long, m_key):
     '''Given lat/lng, returns the {lat:, lng:} of the nearest address'''
