@@ -55,7 +55,7 @@ def draw(request):
 
 @login_required
 def index(request):
-    neighborhood_list = Neighborhood.objects.all()
+    neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
     context = {
         'neighborhood_list': neighborhood_list,
         'user': request.user
