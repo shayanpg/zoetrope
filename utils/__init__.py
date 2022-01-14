@@ -97,25 +97,6 @@ def address_download(address, sv_key, m_key):
     # download the street view images for the address using the extracted lat, long
     return download_images(lat, lon, sv_key, fname)
 
-# # TODO: refactor this entire file
-# from django.shortcuts import render, get_object_or_404
-# from django.http import HttpResponse
-# from django.template import loader
-# from django.views import generic
-# import pdb
-#
-# import streetview
-# from datetime import date
-# from calendar import monthrange
-# import math
-# import urllib
-# from ast import literal_eval
-# import pathlib
-#
-# from .models import Neighborhood
-# from shapely.geometry import Polygon, Point
-# import random
-# import re
 def sample_from_area(polygon_dict, n):
     point_list = [(p['lat'], p['lng']) for p in polygon_dict]
     poly = Polygon(point_list)
@@ -127,8 +108,7 @@ def sample_from_area(polygon_dict, n):
         if random_point.within(poly):
             sample.append({"lat":random_coord[0], "lng":random_coord[1]})
     return sample
-#
-#
+
 def str_to_dic(string):
     # takes in the string returned from get_object_or_404
     # for the neighborhood definition and processes it into

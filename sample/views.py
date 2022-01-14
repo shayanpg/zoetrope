@@ -10,7 +10,17 @@ import re
 from utils import str_to_dic, sample_from_area, download_images
 
 @login_required
-def sample(request, neighborhood_id):
+def index(request):
+    neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
+    context = {
+        'neighborhood_list': neighborhood_list,
+        'user': request.user
+    }
+
+    return render(request, 'sample/sampling_index.html', context)
+
+@login_required
+def sample_points(request, neighborhood_id):
 
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
     context = {

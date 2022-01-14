@@ -9,6 +9,36 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 @login_required
 def neighborhood(request):
     if request.method == 'POST':
+        name = request.POST.get('nhoodname').strip()
+        path = request.POST.get('newpath')
+        redir_dest = 'draw'
+        if len(name) == 0:
+            messages.warning(request, "Error: Please try again with a valid name.")
+        else:
+            path = "[" + path + "]"
+            path = path.replace("(", '{"lat":').replace(")", "}")
+            # next line is bc the original format uses spaces only inside a tuple, never between
+            path = path.replace(", ", ', "lng":')
+            n = Neighborhood(author=request.user, name=name, points=path)
+            n.save()
+            redir_dest = n
+            messages.success(request, f'Neighborhood {name} created.')
+        print(name)
+        print(path)
+        # print(request.POST)
+        return redirect(redir_dest)
+
+    neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
+    context = {
+        'title': 'Neighborhood Creator',
+        'neighborhood_list': neighborhood_list,
+        'user': request.user
+    }
+    return render(request, 'neighborhood/nhood_index.html', context)
+
+@login_required
+def json_creator(request):
+    if request.method == 'POST':
         form = NeighborhoodCreationForm(request.POST)
         if form.is_valid():
             n = form.save(commit=False)
@@ -22,12 +52,10 @@ def neighborhood(request):
         form = NeighborhoodCreationForm()
 
     context = {
-        'title':'Neighborhoods',
-        # 'neighborhood_list': Neighborhood.objects.all(),
-        'neighborhood_list': Neighborhood.objects.filter(author=request.user.id),
+        'title':'JSON Creator',
         'form':form,
     }
-    return render(request, 'neighborhood/index.html', context)
+    return render(request, 'neighborhood/json_creator.html', context)
 
 class NeighborhoodDetailView(DetailView):
     model = Neighborhood
