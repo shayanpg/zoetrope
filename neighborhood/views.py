@@ -29,7 +29,6 @@ def neighborhood(request):
     }
     return render(request, 'neighborhood/index.html', context)
 
-# TODO: Add Detail, Update, Delete Views
 class NeighborhoodDetailView(DetailView):
     model = Neighborhood
 

@@ -15,7 +15,7 @@
           <small class="text-muted">Created by {{ n.author }}</small>
         </div>
         <div class="card-footer">
-          <a href="#" class="btn btn-outline-dark">Go To Map</a>
+          <a href="{% url 'sample_points' n.id %}" class="btn btn-outline-dark">Go To Map</a>
           <a href="{% url 'nhood-detail' n.id %}" class="btn btn-outline-info">More Details</a>
         </div>
       </div>
