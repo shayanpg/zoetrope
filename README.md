@@ -12,12 +12,12 @@ A tool for visualizing neighborhood change
 4. `virtualenv venv`
 5. `source venv/bin/activate` (Linux/MacOS) OR `source venv/Scripts/activate` (Windows)
 6. `pip3 install -r requirements.txt`
-7. To create a database:
-    1. `python3 manage.py makemigrations`
-    2. `python3 manage.py migrate`
-8. Create environment variables for each of the following:
+7. Create environment variables for each of the following:
     * DEBUG <- True
     * GMAIL_PASS
+8. To create a database:
+    1. `python3 manage.py makemigrations`
+    2. `python3 manage.py migrate`
 9. Now to run development server run `python3 manage.py runserver`
 10. Go to link specified in terminal (localhost:8000)
 
