@@ -12,7 +12,8 @@ A tool for visualizing neighborhood change
 4. `virtualenv venv`
 5. `source venv/bin/activate` (Linux/MacOS) OR `source venv/Scripts/activate` (Windows)
 6. `pip3 install -r requirements.txt`
-7. Create environment variables for each of the following:
+    * if this fails, manually install relevant packages using pip (Django, django-crispy-forms, Pillow, Shapely, requests)
+7. Create environment variables for each of the following (guide for macOS <a href='https://phoenixnap.com/kb/set-environment-variable-mac'>here</a>):
     * DEBUG <- True
     * GMAIL_PASS
 8. To create a database:
