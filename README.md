@@ -22,6 +22,7 @@ A tool for visualizing neighborhood change
 10. Go to link specified in terminal (localhost:8000)
 
 **NOTE: In development the secret key is randomly generated upon startup - this means you will need to log in again each time you startup the application**
+
 **in production, we will us environment variables for this purpose**
 
 
