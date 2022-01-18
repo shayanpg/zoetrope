@@ -8,7 +8,7 @@ A tool for visualizing neighborhood change
 *Prereqs: Python 3.6 or later, git*
 1. `git clone https://github.com/shayanpg/zoetrope.git`
 2. Navigate to project directory (`zoetrope`)
-3. `pip install virtualenv` OR `pip3 install virtualenv`
+3. `pip3 install virtualenv`
 4. `virtualenv venv`
 5. `source venv/bin/activate` (Linux/MacOS) OR `source venv/Scripts/activate` (Windows)
 6. `pip3 install -r requirements.txt`
