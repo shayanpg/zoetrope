@@ -15,11 +15,13 @@ class ProfileCreationForm(UserCreationForm):
 
         self.fields['gsv_api'].help_text = mark_safe(
             "Don't have an API key? Learn how to get one " +
-            "<a href=https://developers.google.com/maps/documentation/streetview/get-api-key target=_blank>here</a>."
+            "<a href=https://developers.google.com/maps/documentation/streetview/get-api-key target=_blank>here</a>." +
+            "Note: be sure to enable the 'Street View Static API' for this key."
         )
         self.fields['maps_api'].help_text = mark_safe(
             "Don't have an API key? Learn how to get one " +
-            "<a href=https://developers.google.com/maps/documentation/geocoding/start target=_blank>here</a>."
+            "<a href=https://developers.google.com/maps/documentation/geocoding/start target=_blank>here</a>." +
+            "Note: be sure to enable both the 'Geocoding API' and the 'Maps JavaScript API' for this key."
         )
 
     class Meta:
