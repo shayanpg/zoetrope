@@ -9,20 +9,22 @@
 <div class="content-section">
   <div class="card-deck">
   {% if neighborhood_list %}
-  {% for n in neighborhood_list %}
-    <div class="col-sm-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ n.name }}</h5>
-          <small class="text-muted">Created by {{ n.author }}</small>
-        </div>
-        <div class="card-footer">
-          <a href="{% url 'sample_points' n.id %}" class="btn btn-outline-dark">Go To Map</a>
-          <a href="{% url 'nhood-detail' n.id %}" class="btn btn-outline-info">More Details</a>
+    {% for n in neighborhood_list %}
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ n.name }}</h5>
+            <small class="text-muted">Created by {{ n.author }}</small>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'sample_points' n.id %}" class="btn btn-outline-dark">Go To Map</a>
+            <a href="{% url 'nhood-detail' n.id %}" class="btn btn-outline-info">More Details</a>
+          </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
+  {% else %}
+    {% block nolist %}{% endblock nolist %}
   {% endif %}
   </div>
 
