@@ -157,5 +157,5 @@ EMAIL_HOST_USER = "zoetrope.app@gmail.com"
 EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
 
 AMAZON_S3_BUCKET_NAME = "zoetropedownloads"
-AMAZON_S3_ACCESS_KEY_ID = 'AKIA4SILXHZKTJUCKFO4' # Access Key ID of the IAM user
-AMAZON_S3_SECRET_ACCESS_KEY = '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' # Secret Access Key of the IAM user
+AMAZON_S3_ACCESS_KEY_ID = os.environ.get('AMAZON_S3_ACCESS_KEY_ID')
+AMAZON_S3_SECRET_ACCESS_KEY = os.environ.get('AMAZON_S3_SECRET_ACCESS_KEY')

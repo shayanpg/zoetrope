@@ -27,7 +27,6 @@ function:
 
 import re
 from datetime import datetime
-import requests
 import time
 import shutil
 import itertools
@@ -35,8 +34,6 @@ from PIL import Image
 from io import BytesIO
 import os
 import sys
-
-import boto3
 from botocore.exceptions import NoCredentialsError
 import requests
 import mimetypes
@@ -247,6 +244,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
     del response
     return filename
 
+
 def api_download_address(panoid, heading, flat_dir, key, fname, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=2017):
     """
@@ -296,6 +294,7 @@ def api_download_address(panoid, heading, flat_dir, key, fname, width=640, heigh
         filename = None
     del response
     return filename
+
 
 def upload_to_s3(panoid, heading, key, s3, bucket, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=2017):
@@ -395,6 +394,7 @@ def upload_to_s3_address(panoid, heading, key, fname, s3, bucket, width=640, hei
 
     del imageResponse
     return fname + extension
+
 
 def download_flats(panoid, flat_dir, key, width=400, height=300,
                    fov=120, pitch=0, extension='jpg', year=2017):

@@ -69,7 +69,6 @@ def formatted_address(address, m_key):
 def create_s3_client():
     return boto3.client('s3', aws_access_key_id=settings.AMAZON_S3_ACCESS_KEY_ID, aws_secret_access_key=settings.AMAZON_S3_SECRET_ACCESS_KEY)
 
-
 def download_images(latitude, longitude, key, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
     if not panoids:
