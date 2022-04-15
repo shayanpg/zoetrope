@@ -198,7 +198,7 @@ def delete_tiles(tiles, directory):
 
 
 def api_download(panoid, heading, flat_dir, key, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=2017):
+                 fov=120, pitch=0, extension='jpg', year=9999):
     """
     Download an image using the official API. These are not panoramas.
 
@@ -244,7 +244,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
     return filename
 
 def api_download_address(panoid, heading, flat_dir, key, fname, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=2017):
+                 fov=120, pitch=0, extension='jpg', year=9999):
     """
     Download an image using the official API. These are not panoramas.
 
@@ -295,6 +295,6 @@ def api_download_address(panoid, heading, flat_dir, key, fname, width=640, heigh
 
 
 def download_flats(panoid, flat_dir, key, width=400, height=300,
-                   fov=120, pitch=0, extension='jpg', year=2017):
+                   fov=120, pitch=0, extension='jpg', year=9999):
     for heading in [0, 90, 180, 270]:
         api_download(panoid, heading, flat_dir, key, width, height, fov, pitch, extension, year)

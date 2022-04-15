@@ -73,12 +73,12 @@ def download_images(latitude, longitude, key, address = False):
     years = []
     for elem in panoids:
         try:
-            if type(elem['year']) == int:
+            if isinstance(elem['year'], int):
                 years.append(elem['year'])
                 if address != False:
                     streetview.api_download_address(elem['panoid'], angle, DOWNLOAD_DIR, key, address, year=elem['year'])
                 else:
-                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key)
+                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, year=elem['year'])
         except KeyError:
             pass
     years = list(set(years))
