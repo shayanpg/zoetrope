@@ -297,7 +297,7 @@ def api_download_address(panoid, heading, flat_dir, key, fname, width=640, heigh
 
 
 def upload_to_s3(panoid, heading, key, s3, bucket, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=2017):
+                 fov=120, pitch=0, extension='jpg', year=9999):
     """
     Get url of an image to be used for download, using the official API. These are not panoramas.
 
@@ -348,7 +348,7 @@ def upload_to_s3(panoid, heading, key, s3, bucket, width=640, height=640,
 
 
 def upload_to_s3_address(panoid, heading, key, fname, s3, bucket, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=2017):
+                 fov=120, pitch=0, extension='jpg', year=9999):
     """
     Upload an image to given amazon s3 bucket directly without local download.
 
