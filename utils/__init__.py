@@ -1,9 +1,12 @@
+import boto3
 import streetview
 import urllib
 from ast import literal_eval
 import math
 import re, random
 from shapely.geometry import Polygon, Point
+
+from gsv import settings
 
 DOWNLOAD_DIR = './downloads/'
 
@@ -60,6 +63,9 @@ def address_to_coord(address, m_key):
 def formatted_address(address, m_key):
     return geocode_address(address, m_key).get('formatted_address')
 
+def create_s3_client():
+    return boto3.client('s3', aws_access_key_id=settings.AMAZON_S3_ACCESS_KEY_ID, aws_secret_access_key=settings.AMAZON_S3_SECRET_ACCESS_KEY)
+
 def download_images(latitude, longitude, key, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
     if not panoids:
@@ -68,14 +74,18 @@ def download_images(latitude, longitude, key, address = False):
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
     years = []
+
+    s3 = create_s3_client()
+
     for elem in panoids:
         try:
             if isinstance(elem['year'], int):
                 years.append(elem['year'])
                 if address != False:
-                    streetview.api_download_address(elem['panoid'], angle, DOWNLOAD_DIR, key, address, year=elem['year'])
+                    streetview.upload_to_s3_address(elem['panoid'], angle, key, address, s3, settings.AMAZON_S3_BUCKET_NAME,
+                                                    year=elem['year'])
                 else:
-                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, year=elem['year'])
+                    streetview.upload_to_s3(elem['panoid'], angle, key, s3, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
         except KeyError:
             pass
     years = list(set(years))

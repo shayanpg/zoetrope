@@ -27,7 +27,6 @@ function:
 
 import re
 from datetime import datetime
-import requests
 import time
 import shutil
 import itertools
@@ -35,6 +34,9 @@ from PIL import Image
 from io import BytesIO
 import os
 import sys
+from botocore.exceptions import NoCredentialsError
+import requests
+import mimetypes
 
 
 def _panoids_url(lat, lon):
@@ -136,7 +138,6 @@ def tiles_info(panoid):
     tiles = [(x, y, "%s_%dx%d.jpg" % (panoid, x, y), image_url.format(panoid, x, y)) for x, y in coord]
 
     return tiles
-
 
 def download_tiles(tiles, directory, disp=False):
     """
@@ -243,6 +244,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
     del response
     return filename
 
+
 def api_download_address(panoid, heading, flat_dir, key, fname, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=9999):
     """
@@ -292,6 +294,106 @@ def api_download_address(panoid, heading, flat_dir, key, fname, width=640, heigh
         filename = None
     del response
     return filename
+
+
+def upload_to_s3(panoid, heading, key, s3, bucket, width=640, height=640,
+                 fov=120, pitch=0, extension='jpg', year=2017):
+    """
+    Get url of an image to be used for download, using the official API. These are not panoramas.
+
+    Params:
+        :panoid: the panorama id
+        :heading: the heading of the photo. Each photo is taken with a 360
+            camera. You need to specify a direction in degrees as the photo
+            will only cover a partial region of the panorama. The recommended
+            headings to use are 0, 90, 180, or 270.
+        :flat_dir: the direction to save the image to.
+        :key: your API key.
+        :s3: boto3 client to access s3 bucket.
+        :bucket: Amazon S3 Bucket name for images to be uploaded to.
+        :width: downloaded image width (max 640 for non-premium downloads).
+        :height: downloaded image height (max 640 for non-premium downloads).
+        :fov: image field-of-view.
+        :image_format: desired image format.
+
+    You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
+    """
+
+    fname = "%s_%s_%s" % (year, panoid, str(heading))
+
+    url = "https://maps.googleapis.com/maps/api/streetview"
+    params = {
+        # maximum permitted size for free calls
+        "size": "%dx%d" % (width, height),
+        "fov": fov,
+        "pitch": pitch,
+        "heading": heading,
+        "pano": panoid,
+        "key": key
+    }
+
+    try:
+        imageResponse = requests.get(url, params=params, stream=True).raw
+        content_type = imageResponse.headers['content-type']
+        extension = mimetypes.guess_extension(content_type)
+        s3.upload_fileobj(imageResponse, bucket, fname + extension)
+        print("Upload Successful")
+    except FileNotFoundError:
+        print("Image not found")
+    except NoCredentialsError:
+        print("Credentials not available")
+
+    del imageResponse
+    return fname + extension
+
+
+def upload_to_s3_address(panoid, heading, key, fname, s3, bucket, width=640, height=640,
+                 fov=120, pitch=0, extension='jpg', year=2017):
+    """
+    Upload an image to given amazon s3 bucket directly without local download.
+
+    Params:
+        :panoid: the panorama id
+        :heading: the heading of the photo. Each photo is taken with a 360
+            camera. You need to specify a direction in degrees as the photo
+            will only cover a partial region of the panorama. The recommended
+            headings to use are 0, 90, 180, or 270.
+        :key: your API key.
+        :s3: boto3 client to access s3 bucket.
+        :bucket: Amazon S3 Bucket name for images to be uploaded to.
+        :width: downloaded image width (max 640 for non-premium downloads).
+        :height: downloaded image height (max 640 for non-premium downloads).
+        :fov: image field-of-view.
+        :image_format: desired image format.
+
+    You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
+    """
+    fname = "%s_%s_%s" % (year, fname, str(heading))
+
+    url = "https://maps.googleapis.com/maps/api/streetview"
+    params = {
+        # maximum permitted size for free calls
+        "size": "%dx%d" % (width, height),
+        "fov": fov,
+        "pitch": pitch,
+        "heading": heading,
+        "pano": panoid,
+        "key": key
+    }
+
+    try:
+        imageResponse = requests.get(url, params=params, stream=True).raw
+        content_type = imageResponse.headers['content-type']
+        extension = mimetypes.guess_extension(content_type)
+        s3.upload_fileobj(imageResponse, bucket, fname + extension)
+        print("Upload Successful")
+    except FileNotFoundError:
+        print("Image not found")
+    except NoCredentialsError:
+        print("Credentials not available")
+
+    del imageResponse
+    return fname + extension
 
 
 def download_flats(panoid, flat_dir, key, width=400, height=300,
