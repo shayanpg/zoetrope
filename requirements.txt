@@ -1,5 +1,6 @@
 asgiref==3.4.1
 backports.zoneinfo==0.2.1
+boto3==1.21.44
 certifi==2021.10.8
 charset-normalizer==2.0.10
 DateTime==4.3
