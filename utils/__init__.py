@@ -57,6 +57,15 @@ def geocode_address(address, m_key):
         return False
     return data.get('results')[0]
 
+def reverse_geocode(lat, lng, m_key):
+    base_url = 'https://maps.googleapis.com/maps/api/geocode/json'
+    params = "?latlng=%s,%s&key=%s" % (str(lat), str(lng), m_key)
+    add_json = urllib.request.urlopen(base_url+params).read()
+    data = literal_eval(add_json.decode('utf8'))
+    if not data.get('results') or data.get('status') == "ZERO_RESULTS":
+        return False
+    return data.get('results')[0].get('formatted_address')
+
 def address_to_coord(address, m_key):
     return tuple(geocode_address(address, m_key).get('geometry').get('location').values())
 
