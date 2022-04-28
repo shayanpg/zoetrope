@@ -2,19 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import AddressForm
-from utils import address_download, formatted_address
+from .models import Address
+from utils import download_images, geocode_address
 
 @login_required
-def address(request):
+def address_form(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
             #NOTE: If this breaks, check GCP Billing first
-            address = formatted_address(form.cleaned_data.get('address'), request.user.maps_api)
-            if not address:
-                address = form.cleaned_data.get('address')
-            years = address_download(address, request.user.gsv_api, request.user.maps_api)
-            if not years:
+            geocoding = geocode_address(form.cleaned_data.get('address'), request.user.maps_api)
+            # Default failure
+            years, address = False, form.cleaned_data.get('address')
+            if geocoding:
+                address = geocoding.get('formatted_address')
+                lat, lng = tuple(geocoding.get('geometry').get('location').values())
+                # CREATE ADDRESS
+                a = Address(name=address, lat=lat, lng=lng)
+                a.save()
+                fname = address.replace(' ', '_').replace(',', '')
+                years = download_images(lat, lng, request.user.gsv_api, fname)
+            if not years: # Double checks that the download had results
                 messages.warning(request, f'No Photos Found for {address}.')
             else:
                 if len(years) > 1:
@@ -23,6 +31,7 @@ def address(request):
                     year_message = f"Year: {years[0]}"
                 messages.info(request, year_message)
                 messages.success(request, f'Photo(s) downloaded for {address}.')
+            # CREATE ADDRESS w/ address
             return redirect('address')
     else:
         form = AddressForm()

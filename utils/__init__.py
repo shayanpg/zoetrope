@@ -109,18 +109,6 @@ def download_images(latitude, longitude, key, address = False):
     years.sort()
     return years
 
-def address_download(address, sv_key, m_key):
-    # print('Downloading pictures for address:', address)
-    # extracts the latitude and longitude from the address using the maps api
-    coords = address_to_coord(address, m_key)
-    if not coords:
-        return False
-    lat, lon = coords[0], coords[1]
-    # name the file
-    fname = address.replace(' ', '_').replace(',', '')
-    # download the street view images for the address using the extracted lat, long
-    return download_images(lat, lon, sv_key, fname)
-
 def sample_from_area(polygon_dict, n):
     point_list = [(p['lat'], p['lng']) for p in polygon_dict]
     poly = Polygon(point_list)
