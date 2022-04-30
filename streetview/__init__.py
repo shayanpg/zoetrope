@@ -341,13 +341,13 @@ def upload_to_s3(panoid, heading, key, s3, a, p ,bucket, width=640, height=640,
         file_path = a.name + '/'+ fname + extension
         s3.upload_fileobj(imageResponse, bucket, file_path)
         print("Upload Successful")
+        i = ImageModel(file_path=file_path, angle=heading, year=year, pull_id=p, address_id=a)
+        i.save()
     except FileNotFoundError:
         print("Image not found")
     except NoCredentialsError:
         print("Credentials not available")
 
-    i = ImageModel(file_path=file_path, angle=heading, year=year, pull_id=p, address_id=a)
-    i.save()
     del imageResponse
     return fname + extension
 
@@ -393,13 +393,13 @@ def upload_to_s3_address(panoid, heading, key, fname, s3, a, p, bucket, width=64
         file_path = a.name + '/' + fname + extension
         s3.upload_fileobj(imageResponse, bucket, file_path)
         print("Upload Successful")
+        i = ImageModel(file_path=file_path, angle=heading, year=year, pull_id=p, address_id=a)
+        i.save()
     except FileNotFoundError:
         print("Image not found")
     except NoCredentialsError:
         print("Credentials not available")
 
-    i = ImageModel(file_path=file_path, angle=heading, year=year, pull_id=p, address_id=a)
-    i.save()
     del imageResponse
     return fname + extension
 
