@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-import streetview
 
 from neighborhood.models import Neighborhood
 from address.models import Address
-import random
-import re
 
+from datetime import  datetime
+
+from pull.models import Pull
 from utils import str_to_dic, sample_from_area, download_images, reverse_geocode
 
 @login_required
@@ -36,6 +36,8 @@ def sample_points(request, neighborhood_id):
         pts = str_to_dic(n.points)
         sample = sample_from_area(pts, num_points)
         context['sample'] = sample
+        pull = Pull(date=datetime.now().date(), author=request.user, neighborhood_id=n)
+        pull.save()
         for p in sample:
             # CREATE ADDRESS w/ reverse_geocode
             address = reverse_geocode(p['lat'], p['lng'], request.user.maps_api)
@@ -47,7 +49,7 @@ def sample_points(request, neighborhood_id):
                 a.neighborhoods.add(n)
             # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
             fname = address.replace(' ', '_').replace(',', '')
-            years = download_images(p['lat'], p['lng'], request.user.gsv_api, fname)
+            years = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
             if not years:
                 messages.warning(request, f'No Photos Found for "{address}".')
             else:

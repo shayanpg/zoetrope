@@ -38,6 +38,8 @@ from botocore.exceptions import NoCredentialsError
 import requests
 import mimetypes
 
+from image.models import Image as ImageModel
+
 
 def _panoids_url(lat, lon):
     """
@@ -296,7 +298,7 @@ def api_download_address(panoid, heading, flat_dir, key, fname, width=640, heigh
     return filename
 
 
-def upload_to_s3(panoid, heading, key, s3, bucket, width=640, height=640,
+def upload_to_s3(panoid, heading, key, s3, a, p ,bucket, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=9999):
     """
     Get url of an image to be used for download, using the official API. These are not panoramas.
@@ -336,18 +338,21 @@ def upload_to_s3(panoid, heading, key, s3, bucket, width=640, height=640,
         imageResponse = requests.get(url, params=params, stream=True).raw
         content_type = imageResponse.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
-        s3.upload_fileobj(imageResponse, bucket, fname + extension)
+        file_path = a.name + '/'+ fname + extension
+        s3.upload_fileobj(imageResponse, bucket, file_path)
         print("Upload Successful")
     except FileNotFoundError:
         print("Image not found")
     except NoCredentialsError:
         print("Credentials not available")
 
+    i = ImageModel(file_path=file_path, angle=heading, year=year, pull_id=p, address_id=a)
+    i.save()
     del imageResponse
     return fname + extension
 
 
-def upload_to_s3_address(panoid, heading, key, fname, s3, bucket, width=640, height=640,
+def upload_to_s3_address(panoid, heading, key, fname, s3, a, p, bucket, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=9999):
     """
     Upload an image to given amazon s3 bucket directly without local download.
@@ -385,13 +390,16 @@ def upload_to_s3_address(panoid, heading, key, fname, s3, bucket, width=640, hei
         imageResponse = requests.get(url, params=params, stream=True).raw
         content_type = imageResponse.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
-        s3.upload_fileobj(imageResponse, bucket, fname + extension)
+        file_path = a.name + '/' + fname + extension
+        s3.upload_fileobj(imageResponse, bucket, file_path)
         print("Upload Successful")
     except FileNotFoundError:
         print("Image not found")
     except NoCredentialsError:
         print("Credentials not available")
 
+    i = ImageModel(file_path=file_path, angle=heading, year=year, pull_id=p, address_id=a)
+    i.save()
     del imageResponse
     return fname + extension
 

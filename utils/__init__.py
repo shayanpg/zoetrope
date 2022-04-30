@@ -7,6 +7,9 @@ import re, random
 from shapely.geometry import Polygon, Point
 
 from gsv import settings
+from pull.models import Pull
+from image.models import Image
+from datetime import datetime
 
 DOWNLOAD_DIR = './downloads/'
 
@@ -75,7 +78,7 @@ def formatted_address(address, m_key):
 def create_s3_client():
     return boto3.client('s3', aws_access_key_id=settings.AMAZON_S3_ACCESS_KEY_ID, aws_secret_access_key=settings.AMAZON_S3_SECRET_ACCESS_KEY)
 
-def download_images(latitude, longitude, key, address = False):
+def download_images(latitude, longitude, key, p, a=None, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
     if not panoids:
         return False
@@ -99,10 +102,10 @@ def download_images(latitude, longitude, key, address = False):
                 else:
                     print(settings.DOWNLOAD_LOCAL)
                     if address != False:
-                        streetview.upload_to_s3_address(elem['panoid'], angle, key, address, s3, settings.AMAZON_S3_BUCKET_NAME,
+                        streetview.upload_to_s3_address(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME,
                                                         year=elem['year'])
                     else:
-                        streetview.upload_to_s3(elem['panoid'], angle, key, s3, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
+                        streetview.upload_to_s3(elem['panoid'], angle, key, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
         except KeyError:
             pass
     years = list(set(years))

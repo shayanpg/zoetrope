@@ -1,6 +1,10 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from pull.models import Pull
 from .forms import AddressForm
 from .models import Address
 from utils import download_images, geocode_address
@@ -21,7 +25,9 @@ def address_form(request):
                 a = Address(name=address, lat=lat, lng=lng)
                 a.save()
                 fname = address.replace(' ', '_').replace(',', '')
-                years = download_images(lat, lng, request.user.gsv_api, fname)
+                p = Pull(date=datetime.now().date(), author=request.user, address_id=a)
+                p.save()
+                years = download_images(lat, lng, request.user.gsv_api, p, a, fname)
             if not years: # Double checks that the download had results
                 messages.warning(request, f'No Photos Found for {address}.')
             else:

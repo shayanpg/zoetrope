@@ -1,5 +1,4 @@
 from django.db import models
-from accounts.models import Profile
 from neighborhood.models import Neighborhood
 
 # Create your models here.
