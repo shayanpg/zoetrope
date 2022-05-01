@@ -169,9 +169,9 @@ def download_tiles(tiles, directory, disp=False):
         del response
 
 
-def stich_tiles(panoid, tiles, directory, final_directory):
+def stitch_tiles(panoid, tiles, directory, final_directory):
     """
-    Stiches all the tiles of a panorama together. The tiles are located in
+    Stitches all the tiles of a panorama together. The tiles are located in
     `directory'.
     """
 
@@ -181,15 +181,10 @@ def stich_tiles(panoid, tiles, directory, final_directory):
     panorama = Image.new('RGB', (26*tile_width, 13*tile_height))
 
     for x, y, fname, url in tiles:
-
         fname = directory + "/" + fname
         tile = Image.open(fname)
-
         panorama.paste(im=tile, box=(x*tile_width, y*tile_height))
-
         del tile
-
-#        print fname
 
     panorama.save(final_directory + ("/%s.jpg" % panoid))
     del panorama
@@ -200,7 +195,7 @@ def delete_tiles(tiles, directory):
         os.remove(directory + "/" + fname)
 
 
-def api_download(panoid, heading, flat_dir, key, width=640, height=640,
+def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=9999):
     """
     Download an image using the official API. These are not panoramas.
@@ -221,8 +216,7 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
 
-    fname = "%s_%s_%s" % (year, panoid, str(heading))
-    image_format = extension if extension != 'jpg' else 'jpeg'
+    fname = "%s_%s_%s" % (year, fname, str(heading))
 
     url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
@@ -240,65 +234,14 @@ def api_download(panoid, heading, flat_dir, key, width=640, height=640,
         img = Image.open(BytesIO(response.content))
         filename = '%s/%s.%s' % (flat_dir, fname, extension)
         img.save(filename, image_format)
+        #TODO: Create ImageModel here, reduce redundancy in s3 functions too
     except:
         print("Image not found")
         filename = None
     del response
     return filename
 
-
-def api_download_address(panoid, heading, flat_dir, key, fname, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=9999):
-    """
-    Download an image using the official API. These are not panoramas.
-
-    Params:
-        :panoid: the panorama id
-        :heading: the heading of the photo. Each photo is taken with a 360
-            camera. You need to specify a direction in degrees as the photo
-            will only cover a partial region of the panorama. The recommended
-            headings to use are 0, 90, 180, or 270.
-        :flat_dir: the direction to save the image to.
-        :key: your API key.
-        :width: downloaded image width (max 640 for non-premium downloads).
-        :height: downloaded image height (max 640 for non-premium downloads).
-        :fov: image field-of-view.
-        :image_format: desired image format.
-
-    You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
-    """
-    fname = "%s_%s_%s" % (year, fname, str(heading))
-    image_format = extension if extension != 'jpg' else 'jpeg'
-
-    url = "https://maps.googleapis.com/maps/api/streetview"
-    params = {
-        # maximum permitted size for free calls
-        "size": "%dx%d" % (width, height),
-        "fov": fov,
-        "pitch": pitch,
-        "heading": heading,
-        "pano": panoid,
-        "key": key
-    }
-
-    response = requests.get(url, params=params, stream=True)
-    # print("CONTENT:", response.content)
-    try:
-        img = Image.open(BytesIO(response.content))
-        # print('success img:', img)
-        # img.show()
-        filename = '%s/%s.%s' % (flat_dir, fname, extension)
-        # print('filename success:', filename)
-        # print(image_format)
-        img.save(filename, image_format)
-    except:
-        print("Image not found:", sys.exc_info()[0])
-        filename = None
-    del response
-    return filename
-
-
-def upload_to_s3(panoid, heading, key, s3, a, p ,bucket, width=640, height=640,
+def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, height=640,
                  fov=120, pitch=0, extension='jpg', year=9999):
     """
     Get url of an image to be used for download, using the official API. These are not panoramas.
@@ -321,7 +264,7 @@ def upload_to_s3(panoid, heading, key, s3, a, p ,bucket, width=640, height=640,
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
 
-    fname = "%s_%s_%s" % (year, panoid, str(heading))
+    fname = "%s_%s_%s" % (year, fname, str(heading))
 
     url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
