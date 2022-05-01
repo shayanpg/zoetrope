@@ -216,6 +216,7 @@ def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=
     """
 
     fname = "%s_%s_%s" % (year, fname, str(heading))
+    image_format = extension if extension != 'jpg' else 'jpeg'
 
     url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
@@ -235,8 +236,9 @@ def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=
         img.save(filename, image_format)
         i = ImageModel(file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)
         i.save()
-    except:
+    except Exception as e:
         print("Image not found")
+        print("exception: ", e)
         filename = None
     del response
     return filename
@@ -282,7 +284,7 @@ def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, heigh
         content_type = imageResponse.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
         filename = '%s/%s.%s' % (a.name, fname, extension)
-        s3.upload_fileobj(imageResponse, bucket, file_path)
+        s3.upload_fileobj(imageResponse, bucket, filename)
         print("Upload Successful")
         i = ImageModel(file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)
         i.save()
