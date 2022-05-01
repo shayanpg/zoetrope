@@ -283,7 +283,8 @@ def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, heigh
     try:
         content_type = imageResponse.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
-        filename = '%s/%s.%s' % (a.name, fname, extension)
+        # NOTE: the '.' is already in the extension
+        filename = '%s/%s%s' % (a.name, fname, extension)
         s3.upload_fileobj(imageResponse, bucket, filename)
         print("Upload Successful")
         i = ImageModel(file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)
