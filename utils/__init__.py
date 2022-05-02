@@ -82,6 +82,8 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
     if not panoids:
         return False
+    if not address:
+        address = "NO_ADDRESS"
     obj_coord = (panoids[0]['lat'], panoids[0]['lon'])
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
@@ -95,17 +97,9 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
             if isinstance(elem['year'], int):
                 years.append(elem['year'])
                 if settings.DOWNLOAD_LOCAL:
-                    if address != False:
-                        streetview.api_download_address(elem['panoid'], angle, DOWNLOAD_DIR, key, address, year=elem['year'])
-                    else:
-                        streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, year=elem['year'])
+                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'])
                 else:
-                    print(settings.DOWNLOAD_LOCAL)
-                    if address != False:
-                        streetview.upload_to_s3_address(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME,
-                                                        year=elem['year'])
-                    else:
-                        streetview.upload_to_s3(elem['panoid'], angle, key, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
+                    streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
         except KeyError:
             pass
     years = list(set(years))

@@ -19,6 +19,9 @@ A tool for visualizing neighborhood change
       * False if you have AWS S3 configured, True otherwise
     * GMAIL_PASS
       * request from developer (include what OS you are running)
+    * AMAZON_S3_BUCKET_NAME
+      * need only if DOWNLOAD_LOCAL == False
+      * <a href='https://erangad.medium.com/upload-a-remote-image-to-s3-without-saving-it-first-with-python-def9c6ee1140'>guide</a>
     * AMAZON_S3_ACCESS_KEY_ID
       * need only if DOWNLOAD_LOCAL == False
       * <a href='https://erangad.medium.com/upload-a-remote-image-to-s3-without-saving-it-first-with-python-def9c6ee1140'>guide</a>
