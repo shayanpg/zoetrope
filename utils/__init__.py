@@ -97,9 +97,9 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
             if isinstance(elem['year'], int):
                 years.append(elem['year'])
                 if settings.DOWNLOAD_LOCAL:
-                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'])
+                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'], month=elem['month'])
                 else:
-                    streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
+                    streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'], month=elem['month'])
         except KeyError:
             pass
     years = list(set(years))
