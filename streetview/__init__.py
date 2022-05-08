@@ -195,7 +195,7 @@ def delete_tiles(tiles, directory):
 
 
 def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=9999, month=1):
+                 fov=120, pitch=0, extension='jpg', year=9999, month=0):
     """
     Download an image using the official API. These are not panoramas.
 
@@ -215,7 +215,7 @@ def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
 
-    fname = "%s_%s_%s_%s" % (year, month, fname, str(heading))
+    fname = "%s_%s_%s_%s" % (month, year, fname, str(heading))
     image_format = extension if extension != 'jpg' else 'jpeg'
 
     url = "https://maps.googleapis.com/maps/api/streetview"
@@ -244,7 +244,7 @@ def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=
     return filename
 
 def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, height=640,
-                 fov=120, pitch=0, extension='jpg', year=9999, month=1):
+                 fov=120, pitch=0, extension='jpg', year=9999, month=0):
     """
     Get url of an image to be used for download, using the official API. These are not panoramas.
 
@@ -266,7 +266,7 @@ def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, heigh
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
 
-    fname = "%s_%s_%s_%s" % (year, month, fname, str(heading))
+    fname = "%s_%s_%s_%s" % (month, year, fname, str(heading))
 
     url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
