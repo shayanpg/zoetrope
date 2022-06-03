@@ -35,7 +35,4 @@ A tool for visualizing neighborhood change
 
 **in production, we will us environment variables for this purpose**
 
-
-## TODO: Production Installation guide and product description
-
-(Uses Adrian Letchford's `streetview` library which allows users to download old images)
+(Uses a modified version of Adrian Letchford's `streetview` library which allows users to download old images)
