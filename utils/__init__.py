@@ -7,6 +7,9 @@ import re, random
 from shapely.geometry import Polygon, Point
 
 from gsv import settings
+from pull.models import Pull
+from image.models import Image
+from datetime import datetime
 
 DOWNLOAD_DIR = './downloads/'
 
@@ -57,6 +60,15 @@ def geocode_address(address, m_key):
         return False
     return data.get('results')[0]
 
+def reverse_geocode(lat, lng, m_key):
+    base_url = 'https://maps.googleapis.com/maps/api/geocode/json'
+    params = "?latlng=%s,%s&key=%s" % (str(lat), str(lng), m_key)
+    add_json = urllib.request.urlopen(base_url+params).read()
+    data = literal_eval(add_json.decode('utf8'))
+    if not data.get('results') or data.get('status') == "ZERO_RESULTS":
+        return False
+    return data.get('results')[0].get('formatted_address')
+
 def address_to_coord(address, m_key):
     return tuple(geocode_address(address, m_key).get('geometry').get('location').values())
 
@@ -66,10 +78,12 @@ def formatted_address(address, m_key):
 def create_s3_client():
     return boto3.client('s3', aws_access_key_id=settings.AMAZON_S3_ACCESS_KEY_ID, aws_secret_access_key=settings.AMAZON_S3_SECRET_ACCESS_KEY)
 
-def download_images(latitude, longitude, key, address = False):
+def download_images(latitude, longitude, key, p, a=None, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
     if not panoids:
         return False
+    if not address:
+        address = "NO_ADDRESS"
     obj_coord = (panoids[0]['lat'], panoids[0]['lon'])
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
@@ -83,34 +97,14 @@ def download_images(latitude, longitude, key, address = False):
             if isinstance(elem['year'], int):
                 years.append(elem['year'])
                 if settings.DOWNLOAD_LOCAL:
-                    if address != False:
-                        streetview.api_download_address(elem['panoid'], angle, DOWNLOAD_DIR, key, address, year=elem['year'])
-                    else:
-                        streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, year=elem['year'])
+                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'], month=elem['month'])
                 else:
-                    print(settings.DOWNLOAD_LOCAL)
-                    if address != False:
-                        streetview.upload_to_s3_address(elem['panoid'], angle, key, address, s3, settings.AMAZON_S3_BUCKET_NAME,
-                                                        year=elem['year'])
-                    else:
-                        streetview.upload_to_s3(elem['panoid'], angle, key, s3, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'])
+                    streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'], month=elem['month'])
         except KeyError:
             pass
     years = list(set(years))
     years.sort()
     return years
-
-def address_download(address, sv_key, m_key):
-    # print('Downloading pictures for address:', address)
-    # extracts the latitude and longitude from the address using the maps api
-    coords = address_to_coord(address, m_key)
-    if not coords:
-        return False
-    lat, lon = coords[0], coords[1]
-    # name the file
-    fname = address.replace(' ', '_').replace(',', '')
-    # download the street view images for the address using the extracted lat, long
-    return download_images(lat, lon, sv_key, fname)
 
 def sample_from_area(polygon_dict, n):
     point_list = [(p['lat'], p['lng']) for p in polygon_dict]

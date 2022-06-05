@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'address',
     'sample',
     'neighborhood',
+    'pull',
+    'image',
     'accounts',
     'crispy_forms',
     'django.contrib.admin',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -157,6 +160,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "zoetrope.app@gmail.com"
 EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
 
-AMAZON_S3_BUCKET_NAME = "zoetropedownloads"
+AMAZON_S3_BUCKET_NAME = os.environ.get('AMAZON_S3_BUCKET_NAME')
 AMAZON_S3_ACCESS_KEY_ID = os.environ.get('AMAZON_S3_ACCESS_KEY_ID')
 AMAZON_S3_SECRET_ACCESS_KEY = os.environ.get('AMAZON_S3_SECRET_ACCESS_KEY')
