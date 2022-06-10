@@ -87,7 +87,7 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
     obj_coord = (panoids[0]['lat'], panoids[0]['lon'])
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
-    years = []
+    years, files = [], []
 
     if not settings.DOWNLOAD_LOCAL:
         s3 = create_s3_client()
@@ -97,14 +97,15 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
             if isinstance(elem['year'], int):
                 years.append(elem['year'])
                 if settings.DOWNLOAD_LOCAL:
-                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'], month=elem['month'])
+                    filename = streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'], month=elem['month'])
                 else:
-                    streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'], month=elem['month'])
+                    filename = streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'], month=elem['month'])
+                files.append(filename)
         except KeyError:
             pass
     years = list(set(years))
     years.sort()
-    return years
+    return years, files
 
 def sample_from_area(polygon_dict, n):
     point_list = [(p['lat'], p['lng']) for p in polygon_dict]

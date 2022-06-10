@@ -27,7 +27,7 @@ def address_form(request):
                 fname = address.replace(' ', '_').replace(',', '')
                 p = Pull(date=datetime.now().date(), author=request.user, address_id=a)
                 p.save()
-                years = download_images(lat, lng, request.user.gsv_api, p, a, fname)
+                years, files = download_images(lat, lng, request.user.gsv_api, p, a, fname)
             if not years: # Double checks that the download had results
                 messages.warning(request, f'No Photos Found for {address}.')
             else:

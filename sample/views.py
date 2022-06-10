@@ -49,7 +49,7 @@ def sample_points(request, neighborhood_id):
                 a.neighborhoods.add(n)
             # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
             fname = address.replace(' ', '_').replace(',', '')
-            years = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
+            years, files = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
             if not years:
                 messages.warning(request, f'No Photos Found for "{address}".')
             else:
