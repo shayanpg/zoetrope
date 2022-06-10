@@ -232,7 +232,7 @@ def api_download(panoid, heading, flat_dir, key, fname, a, p, width=640, height=
     response = requests.get(url, params=params, stream=True)
     try:
         img = Image.open(BytesIO(response.content))
-        filename = 'places/%s/%s.%s' % (flat_dir, fname, extension)
+        filename = '%s/%s.%s' % (flat_dir, fname, extension)
         img.save(filename, image_format)
         i = ImageModel(file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)
         i.save()
@@ -279,16 +279,19 @@ def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, heigh
         "key": key
     }
 
-    imageResponse = requests.get(url, params=params, stream=True).raw
+    # imageResponse = requests.get(url, params=params, stream=True).raw
+    imageResponse = requests.get(url, params=params, stream=True) # Added with ImageModel upload method
     try:
+        img = Image.open(BytesIO(imageResponse.content)) # Added with ImageModel upload method
         content_type = imageResponse.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
         # NOTE: the '.' is already in the extension
-        filename = 'places/%s/%s%s' % (a.name, fname, extension)
-        s3.upload_fileobj(imageResponse, bucket, filename)
-        print("Upload Successful")
-        i = ImageModel(file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)
+        filename = '%s/%s%s' % (a.name, fname, extension)
+        # s3.upload_fileobj(imageResponse, bucket, filename)
+        # upload should be handled by image=imageResponse
+        i = ImageModel(image=img, file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)
         i.save()
+        print("Upload Successful")
     except FileNotFoundError:
         print("Image not found")
         filename = None

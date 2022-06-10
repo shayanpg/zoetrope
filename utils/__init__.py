@@ -8,7 +8,7 @@ from shapely.geometry import Polygon, Point
 
 from gsv import settings
 from pull.models import Pull
-from image.models import Image
+from image.models import Image # CAN THIS BE DELETED? see in a future commit
 from datetime import datetime
 
 DOWNLOAD_DIR = './downloads/'
