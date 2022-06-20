@@ -48,6 +48,7 @@ def sample_points(request, neighborhood_id):
                 a.save()
                 a.neighborhoods.add(n)
             # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
+            print("Address:", address)
             fname = address.replace(' ', '_').replace(',', '')
             dates, urls = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
             assert len(dates) == len(urls)
@@ -61,9 +62,9 @@ def sample_points(request, neighborhood_id):
                 message = address +" in " + month_map[int(month)] + ", " + str(year)
                 # message_to_url[message] = urls[i]
                 messages.add_message(request, messages.INFO, message)
-                print(message)
+                # print(message)
                 messages.add_message(request, messages.INFO, urls[i])
-                print(urls[i])
+                # print(urls[i])
 
         return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))
 
@@ -76,7 +77,7 @@ def sample_success(request, neighborhood_id, sample):
 
     for message in image_data:
         print("Sent_message:", message)
-        
+
     context = {
         'title':'Neighborhood Sample Success Page',
         'neighborhood': n,
