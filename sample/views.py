@@ -30,6 +30,7 @@ def sample_points(request, neighborhood_id):
         'user': request.user,
         'sample': []
     }
+    month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
 
     if request.method == "POST":
         num_points = int(request.POST.get('total_pic'))
@@ -54,17 +55,16 @@ def sample_points(request, neighborhood_id):
             assert len(dates) == len(urls)
             if not urls:
                 messages.warning(request, f'No Photos Found for "{address}".')
-
-            month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
-            # message_to_url = dict()
-            for i in range(len(urls)):
-                year, month = dates[i][0], dates[i][1]
-                message = address +" in " + month_map[int(month)] + ", " + str(year)
-                # message_to_url[message] = urls[i]
-                messages.add_message(request, messages.INFO, message)
-                # print(message)
-                messages.add_message(request, messages.INFO, urls[i])
-                # print(urls[i])
+            else:
+                # message_to_url = dict()
+                for i in range(len(urls)):
+                    year, month = dates[i][0], dates[i][1]
+                    message = address +" in " + month_map[int(month)] + ", " + str(year)
+                    # message_to_url[message] = urls[i]
+                    messages.add_message(request, messages.INFO, message)
+                    # print(message)
+                    messages.add_message(request, messages.INFO, urls[i])
+                    # print(urls[i])
 
         return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))
 
