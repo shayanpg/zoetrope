@@ -23,6 +23,16 @@
   <br>
   <a href="{% url 'sample_points' neighborhood.id %}" class="btn btn-outline-info">Sample Again!</a>
 
+  {% if messages %}
+  <div class="messages">
+      {% for message in messages %}
+      <p>
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}{{ message }}{% endif %}
+      </p>
+      {% endfor %}
+  </div>
+  {% endif %}
+
   <script async
       src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
   </script>
