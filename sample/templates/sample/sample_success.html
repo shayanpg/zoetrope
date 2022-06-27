@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load url_finders %}
 
 {% block head %}
 <style type="text/css">
@@ -22,6 +23,22 @@
   <div id="map"></div>
   <br>
   <a href="{% url 'sample_points' neighborhood.id %}" class="btn btn-outline-info">Sample Again!</a>
+
+  {% if messages %}
+  <div class="messages">
+      {% for message in messages %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+          {% if message|is_https_url %}
+            <img src="{{ message }}" alt="Picture of {{ message }}">
+          {% else %}
+            <h3>{{ message }}</h3>
+          {% endif %}
+        {% endif %}
+
+      {% endfor %}
+  </div>
+  {% endif %}
 
   <script async
       src="https://maps.googleapis.com/maps/api/js?key={{ user.maps_api }}&callback=initMap">
