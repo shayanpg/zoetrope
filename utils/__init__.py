@@ -1,4 +1,7 @@
 import boto3
+from botocore.exceptions import ClientError
+import logging
+import os
 import streetview
 import urllib
 from ast import literal_eval
@@ -78,6 +81,24 @@ def formatted_address(address, m_key):
 def create_s3_client():
     return boto3.client('s3', aws_access_key_id=settings.AMAZON_S3_ACCESS_KEY_ID, aws_secret_access_key=settings.AMAZON_S3_SECRET_ACCESS_KEY)
 
+def create_presigned_url(s3_client, filename, expiration=3600):
+    """Generate a presigned URL to share an S3 object
+    SOURCE: modification from  https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-presigned-urls.html
+    :param expiration: Time in seconds for the presigned URL to remain valid
+    :return: Presigned URL as string. If error, returns None.
+    """
+    # Generate a presigned URL for the S3 object
+    try:
+        response = s3_client.generate_presigned_url('get_object',
+                                                    Params={'Bucket': os.environ.get('AMAZON_S3_BUCKET_NAME'),
+                                                            'Key': filename},
+                                                    ExpiresIn=expiration)
+    except ClientError as e:
+        logging.error(e)
+        return None
+    # The response contains the presigned URL
+    return response
+
 def download_images(latitude, longitude, key, p, a=None, address = False):
     panoids = streetview.panoids(lat=latitude, lon=longitude)
     if not panoids:
@@ -87,7 +108,7 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
     obj_coord = (panoids[0]['lat'], panoids[0]['lon'])
     pic_coord = (latitude, longitude)
     angle = calculate_initial_compass_bearing(obj_coord, pic_coord)
-    years = []
+    dates, urls = [], []
 
     if not settings.DOWNLOAD_LOCAL:
         s3 = create_s3_client()
@@ -95,16 +116,26 @@ def download_images(latitude, longitude, key, p, a=None, address = False):
     for elem in panoids:
         try:
             if isinstance(elem['year'], int):
-                years.append(elem['year'])
+                dates.append([ elem['year'], elem['month'] ])
+                
                 if settings.DOWNLOAD_LOCAL:
-                    streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'], month=elem['month'])
+                    filename = streetview.api_download(elem['panoid'], angle, DOWNLOAD_DIR, key, address, a, p, year=elem['year'], month=elem['month'])
                 else:
-                    streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'], month=elem['month'])
+                    filename = streetview.upload_to_s3(elem['panoid'], angle, key, address, s3, a, p, settings.AMAZON_S3_BUCKET_NAME, year=elem['year'], month=elem['month'])
+
+                # create url
+                url = create_presigned_url(s3, filename)
+                if not url:
+                    # IF you see antioch from above, something went wrong
+                    urls.append("https://upload.wikimedia.org/wikipedia/commons/a/af/San_Joaquin_Sacramento_confluence_at_Antioch_CA.jpg")
+                else:
+                    urls.append(url)
         except KeyError:
             pass
-    years = list(set(years))
-    years.sort()
-    return years
+    # NO longer want to sort years or make into set BECAUSE we have months with which they are paired
+    # years = list(set(years))
+    # years.sort()
+    return dates, urls
 
 def sample_from_area(polygon_dict, n):
     point_list = [(p['lat'], p['lng']) for p in polygon_dict]

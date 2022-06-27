@@ -266,7 +266,8 @@ def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, heigh
     You can find instructions to obtain an API key here: https://developers.google.com/maps/documentation/streetview/
     """
 
-    fname = "%s_%s_%s_%s" % (month, year, fname, str(heading))
+    # DO NOT TOUCH - filename format is used in sample/views.py
+    fname = "%s_%s_%s_%s" % (year, month, fname, str(heading))
 
     url = "https://maps.googleapis.com/maps/api/streetview"
     params = {
@@ -283,8 +284,11 @@ def upload_to_s3(panoid, heading, key, fname, s3, a, p ,bucket, width=640, heigh
     try:
         content_type = imageResponse.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
+
         # NOTE: the '.' is already in the extension
+        # DO NOT TOUCH - filename format is used in sample/views.py
         filename = 'places/%s/%s%s' % (a.name, fname, extension)
+
         s3.upload_fileobj(imageResponse, bucket, filename)
         print("Upload Successful")
         i = ImageModel(file_path=filename, angle=heading, year=year, pull_id=p, address_id=a)

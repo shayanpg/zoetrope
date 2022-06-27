@@ -30,6 +30,7 @@ def sample_points(request, neighborhood_id):
         'user': request.user,
         'sample': []
     }
+    month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
 
     if request.method == "POST":
         num_points = int(request.POST.get('total_pic'))
@@ -42,23 +43,29 @@ def sample_points(request, neighborhood_id):
             # CREATE ADDRESS w/ reverse_geocode
             address = reverse_geocode(p['lat'], p['lng'], request.user.maps_api)
             if not address:
-                address = "No Address for (%s, %s)" % (p['lat'], p['lng'])
+                address = '"No Address for (%s, %s)"' % (p['lat'], p['lng'])
             else: # Only need to save addresses that actually exist -- also good measure against DOS attacks
                 a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
                 a.save()
                 a.neighborhoods.add(n)
             # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
+            print("Address:", address)
             fname = address.replace(' ', '_').replace(',', '')
-            years = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
-            if not years:
+            dates, urls = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
+            assert len(dates) == len(urls)
+            if not urls:
                 messages.warning(request, f'No Photos Found for "{address}".')
             else:
-                if len(years) > 1:
-                    year_message = address + " Years: " + ', '.join([str(year) for year in years[:-1]]) + ' and ' + str(years[-1])
-                else:
-                    year_message = address + f" Year: {years[0]}"
-                messages.info(request, year_message)
-                messages.success(request, f'Photo(s) downloaded for "{address}".')
+                # message_to_url = dict()
+                for i in range(len(urls)):
+                    year, month = dates[i][0], dates[i][1]
+                    message = address +" in " + month_map[int(month)] + ", " + str(year)
+                    # message_to_url[message] = urls[i]
+                    messages.add_message(request, messages.INFO, message)
+                    # print(message)
+                    messages.add_message(request, messages.INFO, urls[i])
+                    # print(urls[i])
+
         return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))
 
     return render(request, 'sample/sample.html', context)
@@ -66,10 +73,17 @@ def sample_points(request, neighborhood_id):
 @login_required
 def sample_success(request, neighborhood_id, sample):
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
+    image_data = messages.get_messages(request)
+
+    for message in image_data:
+        print("Sent_message:", message)
+
     context = {
         'title':'Neighborhood Sample Success Page',
         'neighborhood': n,
         'user': request.user,
-        'sample': sample
+        'sample': sample,
+        # 'message_to_url': message_to_url
+        'no_info_messages': True
     }
     return render(request, "sample/sample_success.html", context)
