@@ -6,8 +6,8 @@ from django.utils.safestring import mark_safe
 class ProfileCreationForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['gsv_api'].required = True
-        self.fields['maps_api'].required = True
+        self.fields['gsv_api'].required = False
+        self.fields['maps_api'].required = False
         self.fields['email'].required = True
 
         self.fields['gsv_api'].label = "Google Street View API Key"
@@ -31,8 +31,8 @@ class ProfileCreationForm(UserCreationForm):
 class ProfileUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['gsv_api'].required = True
-        self.fields['maps_api'].required = True
+        self.fields['gsv_api'].required = False
+        self.fields['maps_api'].required = False
         self.fields['email'].required = True
 
         self.fields['gsv_api'].label = "Google Street View API Key"

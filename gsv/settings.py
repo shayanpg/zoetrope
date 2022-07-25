@@ -160,6 +160,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "zoetrope.app@gmail.com"
 EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASS')
 
+GSV_API_KEY = os.environ.get('GOOGLE_SV_KEY')
+MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_KEY')
+
 AMAZON_S3_BUCKET_NAME = os.environ.get('AMAZON_S3_BUCKET_NAME')
 AMAZON_S3_ACCESS_KEY_ID = os.environ.get('AMAZON_S3_ACCESS_KEY_ID')
 AMAZON_S3_SECRET_ACCESS_KEY = os.environ.get('AMAZON_S3_SECRET_ACCESS_KEY')

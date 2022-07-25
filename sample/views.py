@@ -10,12 +10,13 @@ from datetime import  datetime
 from pull.models import Pull
 from utils import str_to_dic, sample_from_area, download_images, reverse_geocode
 
+from gsv import settings
+
 @login_required
 def index(request):
     neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
     context = {
         'neighborhood_list': neighborhood_list,
-        'user': request.user
     }
 
     return render(request, 'sample/sampling_index.html', context)
@@ -27,7 +28,7 @@ def sample_points(request, neighborhood_id):
     context = {
         'title':'Neighborhood Sampler',
         'neighborhood': n,
-        'user': request.user,
+        'MAPS_API_KEY': settings.MAPS_API_KEY,
         'sample': []
     }
     month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
@@ -41,7 +42,7 @@ def sample_points(request, neighborhood_id):
         pull.save()
         for p in sample:
             # CREATE ADDRESS w/ reverse_geocode
-            address = reverse_geocode(p['lat'], p['lng'], request.user.maps_api)
+            address = reverse_geocode(p['lat'], p['lng'], settings.MAPS_API_KEY)
             if not address:
                 address = '"No Address for (%s, %s)"' % (p['lat'], p['lng'])
             else: # Only need to save addresses that actually exist -- also good measure against DOS attacks
@@ -51,7 +52,7 @@ def sample_points(request, neighborhood_id):
             # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
             print("Address:", address)
             fname = address.replace(' ', '_').replace(',', '')
-            dates, urls = download_images(p['lat'], p['lng'], request.user.gsv_api, pull, a, fname)
+            dates, urls = download_images(p['lat'], p['lng'], settings.GSV_API_KEY, pull, a, fname)
             assert len(dates) == len(urls)
             if not urls:
                 messages.warning(request, f'No Photos Found for "{address}".')
@@ -81,7 +82,7 @@ def sample_success(request, neighborhood_id, sample):
     context = {
         'title':'Neighborhood Sample Success Page',
         'neighborhood': n,
-        'user': request.user,
+        'MAPS_API_KEY': settings.MAPS_API_KEY,
         'sample': sample,
         # 'message_to_url': message_to_url
         'no_info_messages': True
