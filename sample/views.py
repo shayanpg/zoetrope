@@ -21,6 +21,14 @@ def index(request):
 
     return render(request, 'sample/sampling_index.html', context)
 
+def valid_address(address):
+    valid = (
+        address
+        and '+' not in address
+    )
+
+    return valid
+
 @login_required
 def sample_points(request, neighborhood_id):
 
@@ -37,6 +45,7 @@ def sample_points(request, neighborhood_id):
         num_points = int(request.POST.get('num_points'))
         pts = str_to_dic(n.points)
         sample = sample_from_area(pts, num_points)
+        print(sample)
         context['sample'] = sample
         pull = Pull(date=datetime.now().date(), author=request.user, neighborhood_id=n)
         pull.save()
@@ -49,16 +58,19 @@ def sample_points(request, neighborhood_id):
             p = sample[num_sampled]
             # CREATE ADDRESS w/ reverse_geocode
             address = reverse_geocode(p['lat'], p['lng'], settings.MAPS_API_KEY)
-            if not address:
-                address = '"No Address for (%s, %s)"' % (p['lat'], p['lng'])
-            else: # Only need to save addresses that actually exist -- also good measure against DOS attacks
-                a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
-                a.save()
-                a.neighborhoods.add(n)
-            # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
+            if not valid_address(address):
+                continue
+            a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
+            a.save()
+            a.neighborhoods.add(n)
             print("Address:", address)
             fname = address.replace(' ', '_').replace(',', '')
-            dates, urls = download_images(p['lat'], p['lng'], settings.GSV_API_KEY, pull, a, fname)
+            print('p:', p)
+            try:
+                dates, urls = download_images(p['lat'], p['lng'], settings.GSV_API_KEY, pull, a, fname)
+            except TypeError:
+                print("Download images failed for", address)
+                continue
             assert len(dates) == len(urls)
             if not urls:
                 messages.warning(request, f'No Photos Found for "{address}".')
