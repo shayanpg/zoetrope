@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from gsv import settings
 from .forms import NeighborhoodCreationForm
 from .models import Neighborhood
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -32,7 +33,7 @@ def neighborhood(request):
     context = {
         'title': 'Neighborhood Creator',
         'neighborhood_list': neighborhood_list,
-        'user': request.user
+        'MAPS_API_KEY': settings.MAPS_API_KEY
     }
     return render(request, 'neighborhood/nhood_index.html', context)
 

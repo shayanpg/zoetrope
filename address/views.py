@@ -8,6 +8,7 @@ from pull.models import Pull
 from .forms import AddressForm
 from .models import Address
 from utils import download_images, geocode_address
+from gsv import settings
 
 @login_required
 def address_form(request):
@@ -15,7 +16,7 @@ def address_form(request):
         form = AddressForm(request.POST)
         if form.is_valid():
             #NOTE: If this breaks, check GCP Billing first
-            geocoding = geocode_address(form.cleaned_data.get('address'), request.user.maps_api)
+            geocoding = geocode_address(form.cleaned_data.get('address'), settings.MAPS_API_KEY)
             # Default failure
             urls, address = [], form.cleaned_data.get('address')
             point = []
@@ -30,7 +31,7 @@ def address_form(request):
                 fname = address.replace(' ', '_').replace(',', '')
                 p = Pull(date=datetime.now().date(), author=request.user, address_id=a)
                 p.save()
-                dates, urls = download_images(lat, lng, request.user.gsv_api, p, a, fname)
+                dates, urls = download_images(lat, lng, settings.GSV_API_KEY, p, a, fname)
             if not urls: # Double checks that the download had results
                 messages.warning(request, f'No Photos Found for {address}.')
             else:
@@ -69,9 +70,7 @@ def address_success(request, address, point):
 
     context = {
         'address': address,
-        'point': point,
-        'title':'Address Results',
-        'user': request.user,
+        'title':'Results',
         'no_info_messages': True
     }
     return render(request, "address/address_success.html", context)
