@@ -44,9 +44,7 @@ def sample_points(request, neighborhood_id):
     if request.method == "POST":
         num_points = int(request.POST.get('num_points'))
         pts = str_to_dic(n.points)
-        sample = sample_from_area(pts, num_points)
-        print(sample)
-        context['sample'] = sample
+
         pull = Pull(date=datetime.now().date(), author=request.user, neighborhood_id=n)
         pull.save()
 
@@ -55,10 +53,11 @@ def sample_points(request, neighborhood_id):
         tolerance = int(request.POST.get('tolerance'))
         while num_sampled < num_points and num_attempts < num_points+tolerance:
             num_attempts += 1
-            p = sample[num_sampled]
+            p = sample_from_area(pts, 1)[0]
             # CREATE ADDRESS w/ reverse_geocode
             address = reverse_geocode(p['lat'], p['lng'], settings.MAPS_API_KEY)
             if not valid_address(address):
+                print("Invalid address")
                 continue
             a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
             a.save()
@@ -76,19 +75,16 @@ def sample_points(request, neighborhood_id):
                 messages.warning(request, f'No Photos Found for "{address}".')
             else:
                 num_sampled += 1
-                # message_to_url = dict()
+                context['sample'].append(p)
                 for i in range(len(urls)):
                     year, month = dates[i][0], dates[i][1]
                     message = address +" in " + month_map[int(month)] + ", " + str(year)
-                    # message_to_url[message] = urls[i]
                     messages.add_message(request, messages.INFO, message)
-                    # print(message)
                     messages.add_message(request, messages.INFO, urls[i])
-                    # print(urls[i])
         print("num sampled:", num_sampled)
         print("num attempts:", num_attempts)
 
-        return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))
+        return redirect('sample_success', neighborhood_id, str(context['sample']).replace("'", '"'))
 
     return render(request, 'sample/sample.html', context)
 
