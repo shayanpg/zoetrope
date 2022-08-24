@@ -21,6 +21,14 @@ def index(request):
 
     return render(request, 'sample/sampling_index.html', context)
 
+def valid_address(address):
+    valid = (
+        address
+        and '+' not in address
+    )
+
+    return valid
+
 @login_required
 def sample_points(request, neighborhood_id):
 
@@ -34,40 +42,49 @@ def sample_points(request, neighborhood_id):
     month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
 
     if request.method == "POST":
-        num_points = int(request.POST.get('total_pic'))
+        num_points = int(request.POST.get('num_points'))
         pts = str_to_dic(n.points)
-        sample = sample_from_area(pts, num_points)
-        context['sample'] = sample
+
         pull = Pull(date=datetime.now().date(), author=request.user, neighborhood_id=n)
         pull.save()
-        for p in sample:
+
+        num_sampled = 0 # Number of successfully downloaded points
+        num_attempts = 0
+        tolerance = int(request.POST.get('tolerance'))
+        while num_sampled < num_points and num_attempts < num_points+tolerance:
+            num_attempts += 1
+            p = sample_from_area(pts, 1)[0]
             # CREATE ADDRESS w/ reverse_geocode
             address = reverse_geocode(p['lat'], p['lng'], settings.MAPS_API_KEY)
-            if not address:
-                address = '"No Address for (%s, %s)"' % (p['lat'], p['lng'])
-            else: # Only need to save addresses that actually exist -- also good measure against DOS attacks
-                a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
-                a.save()
-                a.neighborhoods.add(n)
-            # years = [2022] # FOR DEBUGGING (speed up page loading when download not required)
+            if not valid_address(address):
+                print("Invalid address")
+                continue
+            a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
+            a.save()
+            a.neighborhoods.add(n)
             print("Address:", address)
             fname = address.replace(' ', '_').replace(',', '')
-            dates, urls = download_images(p['lat'], p['lng'], settings.GSV_API_KEY, pull, a, fname)
+            print('p:', p)
+            try:
+                dates, urls = download_images(p['lat'], p['lng'], settings.GSV_API_KEY, pull, a, fname)
+            except TypeError:
+                print("Download images failed for", address)
+                continue
             assert len(dates) == len(urls)
             if not urls:
                 messages.warning(request, f'No Photos Found for "{address}".')
             else:
-                # message_to_url = dict()
+                num_sampled += 1
+                context['sample'].append(p)
                 for i in range(len(urls)):
                     year, month = dates[i][0], dates[i][1]
                     message = address +" in " + month_map[int(month)] + ", " + str(year)
-                    # message_to_url[message] = urls[i]
                     messages.add_message(request, messages.INFO, message)
-                    # print(message)
                     messages.add_message(request, messages.INFO, urls[i])
-                    # print(urls[i])
+        print("num sampled:", num_sampled)
+        print("num attempts:", num_attempts)
 
-        return redirect('sample_success', neighborhood_id, str(sample).replace("'", '"'))
+        return redirect('sample_success', neighborhood_id, str(context['sample']).replace("'", '"'))
 
     return render(request, 'sample/sample.html', context)
 

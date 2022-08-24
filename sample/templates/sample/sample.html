@@ -29,8 +29,10 @@
     </div>
     <br>
     <div class="form-group">
-      <label for="nhoodname">Number of Sample Points:</label>
-      <input required id="total_pic" name = "total_pic" class="form-control col-md-4" type="number" step="1" pattern="\d+" min="1" value="5" /> <br>
+      <label for="num_points">How many points do you want to sample?</label>
+      <input required id="num_points" name = "num_points" class="form-control col-md-4" type="number" step="1" pattern="\d+" min="1" value="5" /> <br>
+      <label for="tolerance">How many retries should be allowed for points without image results? (Recommended: 5)</label>
+      <input required id="tolerance" name = "tolerance" class="form-control col-md-4" type="number" step="1" pattern="\d+" min="0" max="20" value="5" /> <br>
       <button type="submit" name="sample-button" class="btn btn-outline-info">Download Images</button>
     </div>
   </form>
