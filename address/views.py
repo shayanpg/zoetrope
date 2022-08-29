@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from accounts.decorators import require_api_calls_remaining
+
 from pull.models import Pull
 from .forms import AddressForm
 from .models import Address
@@ -11,6 +13,7 @@ from utils import download_images, geocode_address
 from gsv import settings
 
 @login_required
+@require_api_calls_remaining
 def address_form(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
@@ -32,6 +35,9 @@ def address_form(request):
                 p = Pull(date=datetime.now().date(), author=request.user, address_id=a)
                 p.save()
                 dates, urls = download_images(lat, lng, settings.GSV_API_KEY, p, a, fname)
+
+                # decrement API usage (including 1 for geocoding)
+                request.user.dec_remaining_calls(1 + len(urls))
             if not urls: # Double checks that the download had results
                 messages.warning(request, f'No Photos Found for {address}.')
             else:

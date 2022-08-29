@@ -8,6 +8,6 @@ class ProfileAdmin(UserAdmin):
     add_form = ProfileCreationForm
     form = ProfileUpdateForm
     model = Profile
-    list_display = ['email', 'username', 'gsv_api', 'maps_api']
+    list_display = ['email', 'username', 'gsv_api', 'maps_api', 'api_calls_remaining']
 
 admin.site.register(Profile, ProfileAdmin)
