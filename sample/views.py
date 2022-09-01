@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from accounts.decorators import require_api_calls_remaining
+
 from neighborhood.models import Neighborhood
 from address.models import Address
 
@@ -13,6 +15,7 @@ from utils import str_to_dic, sample_from_area, download_images, reverse_geocode
 from gsv import settings
 
 @login_required
+@require_api_calls_remaining
 def index(request):
     neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
     context = {
@@ -30,6 +33,7 @@ def valid_address(address):
     return valid
 
 @login_required
+@require_api_calls_remaining
 def sample_points(request, neighborhood_id):
 
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
@@ -56,6 +60,7 @@ def sample_points(request, neighborhood_id):
             p = sample_from_area(pts, 1)[0]
             # CREATE ADDRESS w/ reverse_geocode
             address = reverse_geocode(p['lat'], p['lng'], settings.MAPS_API_KEY)
+            request.user.dec_remaining_calls(1)
             if not valid_address(address):
                 print("Invalid address")
                 continue
@@ -81,6 +86,7 @@ def sample_points(request, neighborhood_id):
                     message = address +" in " + month_map[int(month)] + ", " + str(year)
                     messages.add_message(request, messages.INFO, message)
                     messages.add_message(request, messages.INFO, urls[i])
+                request.user.dec_remaining_calls(len(urls))
         print("num sampled:", num_sampled)
         print("num attempts:", num_attempts)
 

@@ -27,3 +27,10 @@ def update_profile(request):
         'form':form,
     }
     return render(request, 'registration/update_profile.html', context)
+
+@login_required
+def calls_depleted(request):
+    context = {
+        'title':'Calls Depleted',
+    }
+    return render(request, 'calls_depleted.html',context)

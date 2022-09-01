@@ -3,7 +3,8 @@
 {% block content %}
 <!-- TODO: Convert into for loop (nested?) -->
 {% if user.is_authenticated %}
-  <h3>Welcome, {{ user.username }}</h3>
+  <h3>API calls remaining for user {{ user.username }}: {{user.api_calls_remaining}}</h3>
+  <p>Note: The number of API calls made does not necessarily match the number of points or images downloaded.</p>
 {% endif %}
 <div class="row mb-2">
   <div class="col-md-6">

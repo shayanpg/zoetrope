@@ -30,6 +30,8 @@ SECRET_KEY = get_random_secret_key()
 DEBUG = (os.environ.get('DEBUG') == 'True')
 DOWNLOAD_LOCAL = (os.environ.get('DOWNLOAD_LOCAL') == 'True')
 
+LIMIT_CALLS = True
+
 ALLOWED_HOSTS = []
 
 
