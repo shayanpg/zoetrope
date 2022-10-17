@@ -30,7 +30,7 @@ DOWNLOAD_LOCAL = (os.environ.get('DOWNLOAD_LOCAL') == 'True')
 
 LIMIT_CALLS = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['zoetrope.pythonanywhere.com']
 
 
 # Application definition
@@ -136,7 +136,6 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
