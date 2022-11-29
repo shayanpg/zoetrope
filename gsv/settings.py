@@ -27,7 +27,7 @@ load_dotenv() # load from .env
 SECRET_KEY = os.getenv('ZOE_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = int(os.getenv('DEBUG'))
 DOWNLOAD_LOCAL = (os.environ.get('DOWNLOAD_LOCAL') == 'True')
 
 LIMIT_CALLS = True
