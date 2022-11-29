@@ -6,7 +6,7 @@
 <div class="content-section">
   <h2>Results for {{ address }}</h2>
   <br>
-  <a href="{% url 'address' %}" class="btn btn-outline-info">Do It Again!</a>
+  <a href="{% url 'address' %}" class="btn btn-outline-info">Search a New Address</a>
 
   {% if messages %}
   <div class="messages">
@@ -24,6 +24,6 @@
   </div>
   {% endif %}
   <br>
-  <a href="{% url 'address' %}" class="btn btn-outline-info">Do It Again!</a>
+  <a href="{% url 'address' %}" class="btn btn-outline-info">Search a New Address</a>
 </div>
 {% endblock content %}
