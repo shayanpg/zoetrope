@@ -5,7 +5,7 @@ function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {lat: 37.873103, lng: -122.259420},
     zoom: 8,
-    mapTypeId: "terrain",
+    mapTypeId: "satellite",
     gestureHandling: "greedy",
   });
   const drawingManager = new google.maps.drawing.DrawingManager({

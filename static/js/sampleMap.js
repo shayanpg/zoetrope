@@ -22,7 +22,7 @@ function initMap() {
     // zoom: 20 - (Math.round(latMax-latMin + lngMax-lngMin) % 19),// / (centerLat + centerLng);
     // zoom: 800 / (Math.max(latMax-centerLat, centerLat-latMin)**2 + Math.max(lngMax-centerLng, centerLng-lngMin)**2)**0.5,
     center: { lat: centerLat, lng: centerLng },
-    mapTypeId: "terrain",
+    mapTypeId: "satellite",
     gestureHandling: "greedy",
   });
   var sampleCoords = JSON.parse(document.getElementById('sampled_points').innerHTML);
