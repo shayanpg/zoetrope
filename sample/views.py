@@ -14,12 +14,17 @@ from utils import str_to_dic, sample_from_area, download_images, reverse_geocode
 
 from gsv import settings
 
+import samplingstrategies as ss
+
+STRATEGIES = {'randombuildings':ss.RandomBuildings}
+
 @login_required
 @require_api_calls_remaining
 def index(request):
     neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
     context = {
         'neighborhood_list': neighborhood_list,
+        'strategies': STRATEGIES,
     }
 
     return render(request, 'sample/sampling_index.html', context)
