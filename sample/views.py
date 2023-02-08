@@ -5,12 +5,10 @@ from django.contrib import messages
 from accounts.decorators import require_api_calls_remaining
 
 from neighborhood.models import Neighborhood
-from address.models import Address
 
 from datetime import  datetime
 
 from pull.models import Pull
-from utils import str_to_dic, sample_from_area, download_images, reverse_geocode
 
 from gsv import settings
 
@@ -29,13 +27,6 @@ def index(request):
 
     return render(request, 'sample/sampling_index.html', context)
 
-def valid_address(address):
-    valid = (
-        address
-        and '+' not in address
-    )
-
-    return valid
 
 @login_required
 @require_api_calls_remaining
@@ -48,52 +39,30 @@ def sample_points(request, neighborhood_id):
         'MAPS_API_KEY': settings.MAPS_API_KEY,
         'sample': []
     }
-    month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
 
     if request.method == "POST":
-        num_points = int(request.POST.get('num_points'))
-        pts = str_to_dic(n.points)
-
         pull = Pull(date=datetime.now().date(), author=request.user, neighborhood_id=n)
         pull.save()
 
-        num_sampled = 0 # Number of successfully downloaded points
-        num_attempts = 0
-        tolerance = int(request.POST.get('tolerance'))
-        while num_sampled < num_points and num_attempts < num_points+tolerance:
-            num_attempts += 1
-            p = sample_from_area(pts, 1)[0]
-            # CREATE ADDRESS w/ reverse_geocode
-            address = reverse_geocode(p['lat'], p['lng'], settings.MAPS_API_KEY)
-            request.user.dec_remaining_calls(1)
-            if not valid_address(address):
-                print("Invalid address")
-                continue
-            a = Address(name=address, lat=str(p['lat']), lng=str(p['lng']))
-            a.save()
-            a.neighborhoods.add(n)
-            print("Address:", address)
-            fname = address.replace(' ', '_').replace(',', '')
-            print('p:', p)
-            try:
-                dates, urls = download_images(p['lat'], p['lng'], settings.GSV_API_KEY, pull, a, fname)
-            except TypeError:
-                print("Download images failed for", address)
-                continue
-            assert len(dates) == len(urls)
-            if not urls:
-                messages.warning(request, f'No Photos Found for "{address}".')
-            else:
-                num_sampled += 1
-                context['sample'].append(p)
-                for i in range(len(urls)):
-                    year, month = dates[i][0], dates[i][1]
-                    message = address +" in " + month_map[int(month)] + ", " + str(year)
-                    messages.add_message(request, messages.INFO, message)
-                    messages.add_message(request, messages.INFO, urls[i])
-                request.user.dec_remaining_calls(len(urls))
-        print("num sampled:", num_sampled)
-        print("num attempts:", num_attempts)
+        # strategy = STRATEGIES[request.POST.get('strategy')]
+        strategy = STRATEGIES['randombuildings']()
+        ss_config = dict()
+
+        # temp = request.POST.get('strategy')
+        temp = 'randombuildings'
+        if temp == 'randombuildings':
+            ss_config['num_points'] = int(request.POST.get('num_points'))
+            ss_config['neighborhood'] = n
+            ss_config['tolerance'] = int(request.POST.get('tolerance'))
+            ss_config['user'] = request.user
+            ss_config['pull'] = pull
+            ss_config['sample_list'] = context['sample']
+            ss_config['message_q'] = []
+
+        strategy.sample(ss_config)
+
+        for msg_type, message in ss_config['message_q']:
+            messages.add_message(request, msg_type, message)
 
         return redirect('sample_success', neighborhood_id, str(context['sample']).replace("'", '"'))
 
