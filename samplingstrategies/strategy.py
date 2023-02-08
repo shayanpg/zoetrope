@@ -11,4 +11,18 @@ class SamplingStrategy(ABC):
 
     @abstractmethod
     def sample(self, request): # request is JSON with same keys as config, with values being actual value instances
+        """
+        Sample from a neighborhood using a chosen SamplingStrategy.
+
+        Parameters
+        ----------
+        request : dict
+            all the data needed to fulfill the request
+
+        Returns
+        -------
+        list(tuple(list, list))
+            a list (representing each point) of tuples containing a list of dates and
+            the corresponding image url for each date
+        """
         raise NotImplementedError('Cannot call sample() on abstract SamplingStrategy class.')
