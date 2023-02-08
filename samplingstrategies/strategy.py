@@ -21,8 +21,6 @@ class SamplingStrategy(ABC):
 
         Returns
         -------
-        list(tuple(list, list))
-            a list (representing each point) of tuples containing a list of dates and
-            the corresponding image url for each date
+        None
         """
         raise NotImplementedError('Cannot call sample() on abstract SamplingStrategy class.')
