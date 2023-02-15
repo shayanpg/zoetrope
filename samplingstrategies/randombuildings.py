@@ -5,9 +5,7 @@ from utils import str_to_dic, sample_from_area, download_images, reverse_geocode
 
 from .strategy import SamplingStrategy
 
-from neighborhood.models import Neighborhood
 from address.models import Address
-from pull.models import Pull
 from accounts.models import Profile
 
 class RandomBuildings(SamplingStrategy):
@@ -16,13 +14,9 @@ class RandomBuildings(SamplingStrategy):
     CONFIG = {
         'name':[str, NAME],
         'num_points': [int, "Number of points to sample"],
-        'neighborhood': [Neighborhood, "Neighborhood model to sample"],
         'tolerance': [int, "How many retries should be allowed for points without image results"],
         'user': [Profile, "Representation of the calling User"],
-        'pull': [Pull, "Pull for calling request"],
-        'sample_list': [list, "List in which to put sampled points"],
-        'message_q': [list, "List in which to put messages for display on results page. Format [messages.TYPE, 'message string']"],
-        }
+    }
     CONFIG = {**(SamplingStrategy.CONFIG), **CONFIG} # Include entries from SamplingStrategy, **CONFIG is second arg to override super()
 
     def configure(self, request, pull, neighborhood, sample_list, message_q):
@@ -45,16 +39,16 @@ class RandomBuildings(SamplingStrategy):
         )
         return valid
 
-    def sample(self, request): # request is JSON with same keys as config, with values being actual value instances
-        num_points = request.get('num_points')
-        tolerance = request.get('tolerance')
-        n = request.get('neighborhood')
+    def sample(self, config):
+        num_points = config.get('num_points')
+        tolerance = config.get('tolerance')
+        n = config.get('neighborhood')
         pts = str_to_dic(n.points)
-        user = request.get('user')
-        pull = request.get('pull')
+        user = config.get('user')
+        pull = config.get('pull')
         
-        sample = request.get('sample_list')
-        message_q = request.get('message_q')
+        sample = config.get('sample_list')
+        message_q = config.get('message_q')
 
         num_sampled = 0 # Number of successfully downloaded points
         num_attempts = 0
