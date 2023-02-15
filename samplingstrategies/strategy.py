@@ -10,6 +10,32 @@ class SamplingStrategy(ABC):
         return self.NAME
 
     @abstractmethod
+    def configure(self, request, pull, neighborhood, sample_list, message_q):
+        """
+        Populate a dictionary with data needed to sample using this SamplingStrategy.
+
+        Parameters
+        ----------
+        request : HTTP POST request
+            form data; all data needed for the sample other than the pre-determined fields below
+        pull : Pull model object
+        neighborhood : Neighborhood model object
+        sample_list : Empty list to populate with sampled points
+        message_q : Empty list to populate with data to display on the sample success page
+
+        Returns
+        -------
+        config dictionary
+        """
+        config = {
+            'pull': pull,
+            'neighborhood': neighborhood,
+            'sample_list': sample_list,
+            'message_q': message_q,
+        }
+        return config
+
+    @abstractmethod
     def sample(self, request): # request is JSON with same keys as config, with values being actual value instances
         """
         Sample from a neighborhood using a chosen SamplingStrategy.

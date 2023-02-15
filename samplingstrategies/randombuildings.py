@@ -25,6 +25,13 @@ class RandomBuildings(SamplingStrategy):
         }
     CONFIG = {**(SamplingStrategy.CONFIG), **CONFIG} # Include entries from SamplingStrategy, **CONFIG is second arg to override super()
 
+    def configure(self, request, pull, neighborhood, sample_list, message_q):
+        config = super().configure(request, pull, neighborhood, sample_list, message_q)
+        config['num_points'] = int(request.POST.get('num_points'))
+        config['tolerance'] = int(request.POST.get('tolerance'))
+        config['user'] = request.user
+        return config
+
     def orient_images(self):
         pass
 

@@ -43,22 +43,11 @@ def sample_points(request, neighborhood_id):
     if request.method == "POST":
         pull = Pull(date=datetime.now().date(), author=request.user, neighborhood_id=n)
         pull.save()
+        message_q = []
 
         # strategy = STRATEGIES[request.POST.get('strategy')]
-        strategy = STRATEGIES['randombuildings']()
-        ss_config = dict()
-
-        # temp = request.POST.get('strategy')
-        temp = 'randombuildings'
-        if temp == 'randombuildings':
-            ss_config['num_points'] = int(request.POST.get('num_points'))
-            ss_config['neighborhood'] = n
-            ss_config['tolerance'] = int(request.POST.get('tolerance'))
-            ss_config['user'] = request.user
-            ss_config['pull'] = pull
-            ss_config['sample_list'] = context['sample']
-            ss_config['message_q'] = []
-
+        strategy = STRATEGIES['randombuildings']() # temporary line while we lack front-end SS selection
+        ss_config = strategy.configure(request, pull, n, context['sample'], message_q)
         strategy.sample(ss_config)
 
         for msg_type, message in ss_config['message_q']:
