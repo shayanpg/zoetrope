@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% load url_finders %}
+
+{% block content %}
+<div class="content-section">
+  {% if p.address_id %}
+    <h2 class="card-title">Results for {{ p.address_id}}</h2>
+  {% else %}
+    <h2 class="card-title">Results for {{ p.neighborhood_id }}</h2>
+  {% endif %}
+  <br>
+  <a href="{% url 'history' %}" class="btn btn-outline-info">Back to History</a>
+
+  {% if messages %}
+  <div class="messages">
+      {% for message in messages %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+          {% if message|is_https_url %}
+            <img src="{{ message }}" alt="Picture of {{ message }}">
+          {% else %}
+            <h3>{{ message }}</h3>
+          {% endif %}
+        {% endif %}
+
+      {% endfor %}
+  </div>
+  {% endif %}
+  <br>
+  <a href="{% url 'history' %}" class="btn btn-outline-info">Back to History</a>
+</div>
+{% endblock content %}
