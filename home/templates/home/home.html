@@ -56,6 +56,20 @@
     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
       <div class="col p-4 d-flex flex-column position-static">
         <br>
+        <h3 class="mb-0">History</h3>
+        <br>
+        <p class="card-text mb-auto">View past requests</p>
+        <a href="{% url 'history' %}" class="stretched-link">Explore</a>
+      </div>
+      <div class="col-auto d-none d-lg-block">
+        <img src="{% static 'home/neighborhood.jpg' %}" alt="History" width="200" height="250">
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <br>
         <h3 class="mb-0">Settings</h3>
         <br>
         <p class="card-text mb-auto">Update user information</p>

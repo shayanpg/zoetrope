@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<header>
+  <h1 class="jumbotron-heading">Pull History</h1>
+  <br>
+  <p class=help-text>Select a past pull to view:</p>
+</header>
+
+<div class="content-section">
+  <div class="card-deck">
+  {% if pull_list %}
+    {% for p in pull_list %}
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            {% if p.address_id %}
+              <h5 class="card-title">{{ p.address_id}}</h5>
+            {% else %}
+              <h5 class="card-title">{{ p.neighborhood_id }}</h5>
+            {% endif %}
+            <small class="text-muted">Retrieved on {{ p.date }}</small>
+            <small class="text-muted">by {{ p.author }}</small>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'get_pull' p.id %}" class="btn btn-outline-dark">Get Images</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+  <h1 class="jumbotron-heading">No pull history! <a href="{% url 'sample' %}">Start sampling</a></h1>
+  {% endif %}
+  </div>
+
+	{% block form %}{% endblock form %}
+</div>
+{% endblock content %}
