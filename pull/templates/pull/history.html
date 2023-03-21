@@ -23,6 +23,9 @@
             <small class="text-muted">Retrieved on {{ p.date }}</small>
             <small class="text-muted">by {{ p.author }}</small>
           </div>
+          <div class="card-footer">
+            <a href="{% url 'get_pull' p.id %}" class="btn btn-outline-dark">Get Images</a>
+          </div>
         </div>
       </div>
     {% endfor %}
