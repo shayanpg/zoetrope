@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<header>
+    <h1 class="jumbotron-heading">Sampling Strategy Index</h1>
+    <br>
+    <p class=help-text>Select from one of the following strategies:</p>
+</header>
+
+<div class="content-section">
+  <div class="card-deck">
+    {% for s in strategies %}
+        <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">{{ s }}</h5>
+            <p class="card-text mb-auto">DESCRIPTION</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'sample_points' neighborhood_id s %}" class="btn btn-outline-dark">Go To Map</a>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

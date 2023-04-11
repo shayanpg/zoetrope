@@ -22,7 +22,7 @@
   <h1 id="api_failure">Map failed to load, please reload the page.</h1>
   <div id="map"></div>
   <br>
-  <a href="{% url 'sample_points' neighborhood.id %}" class="btn btn-outline-info">Sample Again!</a>
+  <a href="{% url 'sample_points' neighborhood.id strategy %}" class="btn btn-outline-info">Sample Again!</a>
 
   {% if messages %}
   <div class="messages">

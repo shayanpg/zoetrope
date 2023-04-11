@@ -14,11 +14,11 @@ from gsv import settings
 
 import samplingstrategies as ss
 
-STRATEGIES = {'randombuildings':ss.RandomBuildings}
+STRATEGIES = {'Uniform Random Sample':ss.RandomBuildings}
 
 @login_required
 @require_api_calls_remaining
-def index(request):
+def neighborhood_index(request):
     neighborhood_list = Neighborhood.objects.filter(author=request.user.id)
     context = {
         'neighborhood_list': neighborhood_list,
@@ -27,10 +27,19 @@ def index(request):
 
     return render(request, 'sample/sampling_index.html', context)
 
+@login_required
+@require_api_calls_remaining
+def strategy_index(request, neighborhood_id):
+    context = {
+        'neighborhood_id': neighborhood_id,
+        'strategies': STRATEGIES.keys(),
+    }
+
+    return render(request, 'sample/strategy_index.html', context)
 
 @login_required
 @require_api_calls_remaining
-def sample_points(request, neighborhood_id):
+def sample_points(request, neighborhood_id, strategy_name):
 
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
     context = {
@@ -45,20 +54,19 @@ def sample_points(request, neighborhood_id):
         pull.save()
         message_q = []
 
-        # strategy = STRATEGIES[request.POST.get('strategy')]
-        strategy = STRATEGIES['randombuildings']() # temporary line while we lack front-end SS selection
+        strategy = STRATEGIES[strategy_name]()
         ss_config = strategy.configure(request, pull, n, context['sample'], message_q)
         strategy.sample(ss_config)
 
         for msg_type, message in ss_config['message_q']:
             messages.add_message(request, msg_type, message)
 
-        return redirect('sample_success', neighborhood_id, str(context['sample']).replace("'", '"'))
+        return redirect('sample_success', neighborhood_id, strategy_name, str(context['sample']).replace("'", '"'))
 
     return render(request, 'sample/sample.html', context)
 
 @login_required
-def sample_success(request, neighborhood_id, sample):
+def sample_success(request, neighborhood_id, strategy_name, sample):
     n = get_object_or_404(Neighborhood, pk=neighborhood_id)
     image_data = messages.get_messages(request)
 
@@ -68,6 +76,7 @@ def sample_success(request, neighborhood_id, sample):
     context = {
         'title':'Neighborhood Sample Success Page',
         'neighborhood': n,
+        'strategy': strategy_name,
         'MAPS_API_KEY': settings.MAPS_API_KEY,
         'sample': sample,
         # 'message_to_url': message_to_url
