@@ -9,7 +9,7 @@ from accounts.decorators import require_api_calls_remaining
 from pull.models import Pull
 from .forms import AddressForm
 from .models import Address
-from utils import download_images, geocode_address
+from utils import download_images, geocode_address, MONTH_MAP
 from gsv import settings
 
 @login_required
@@ -47,10 +47,9 @@ def address_form(request):
                 #     year_message = f"Year: {years[0]}"
                 # messages.info(request, year_message)
                 # messages.success(request, f'Photo(s) downloaded for {address}.')
-                month_map = {1:"January", 2:"February", 3:"March", 4:"April", 5:"May", 6:"June", 7:"July", 8:"August", 9:"September", 10:"October", 11:"November", 12:"December"}
                 for i in range(len(urls)):
                     year, month = dates[i][0], dates[i][1]
-                    message = address +" in " + month_map[int(month)] + ", " + str(year)
+                    message = address +" in " + MONTH_MAP[int(month)] + ", " + str(year)
                     messages.add_message(request, messages.INFO, message)
                     # print(message)
                     messages.add_message(request, messages.INFO, urls[i])
