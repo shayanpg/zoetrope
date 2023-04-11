@@ -16,6 +16,21 @@ from datetime import datetime
 
 DOWNLOAD_DIR = './downloads/'
 
+MONTH_MAP = {
+    1:"January",
+    2:"February",
+    3:"March",
+    4:"April",
+    5:"May",
+    6:"June",
+    7:"July",
+    8:"August",
+    9:"September",
+    10:"October",
+    11:"November",
+    12:"December",
+}
+
 def calculate_initial_compass_bearing(pointA, pointB):
     """
     Calculates the bearing between two points.
