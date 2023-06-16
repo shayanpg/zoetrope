@@ -2,7 +2,7 @@
 
 # Zoetrope
 
-A tool for visualizing neighborhood change using a modified version of the [streetview](https://github.com/robolyst/streetview) library which helps with time-oriented calls to Google's Street View API.
+Zoetrope is an open source tool facilitating the collection, processing, and analysis of Google Street View data accross time and geographies. It is meant to serve the diverse community of city enthusiasts, urban planners, and researchers interested in exploring the richness of temporal street view imagery. In this spirit, Zoetrope provides an intuitive graphical user interface for easy image sampling while also making accessible useful libraries for avid programmers seeking more customization.
 
 ### [Wiki Homepage](https://github.com/shayanpg/zoetrope/wiki)
 
